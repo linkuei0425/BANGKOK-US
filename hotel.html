@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bangkok Hotel Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        /* Region button styling */
+        .area-btn-active {
+            background-color: #1e40af; /* blue-800 */
+            color: white;
+            border-color: #1e40af;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .area-btn-inactive {
+            background-color: white;
+            color: #4b5563; /* gray-600 */
+            border-color: #d1d5db; /* gray-300 */
+        }
+        .area-btn-inactive:hover {
+            background-color: #f3f4f6; /* gray-100 */
+            color: #1f2937;
+        }
+
+        /* Category button styling */
+        .cat-btn-active {
+            background-color: #3b82f6; /* blue-500 */
+            color: white;
+            border-color: #3b82f6;
+        }
+        .cat-btn-inactive {
+            background-color: #f8fafc; /* slate-50 */
+            color: #64748b; /* slate-500 */
+            border-color: #cbd5e1; /* slate-300 */
+        }
+        .cat-btn-inactive:hover {
+            background-color: #e2e8f0; /* slate-200 */
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen font-sans text-gray-800 pb-12">
+
+    <div class="max-w-5xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-3">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-wide">🇹🇭 Bangkok Hotel Guide</h1>
+                <a href="https://linkuei0425.github.io/BANGKOK-US/index.html" class="inline-flex items-center px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-sm font-bold rounded-lg transition-colors shadow-sm">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                    Home
+                </a>
+            </div>
+            <p class="text-slate-500 text-sm md:text-base">Select a region and accommodation type to explore exclusive recommendations</p>
+        </header>
+
+        <!-- Layer 1: 8 Region Buttons -->
+        <div id="district-buttons" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <!-- Region buttons will be injected by JS -->
+        </div>
+
+        <!-- Layer 2: 3 Category Buttons -->
+        <div id="category-buttons" class="grid grid-cols-3 gap-3 mb-8 bg-white p-3 rounded-xl shadow-sm border border-slate-200 hidden">
+            <!-- Category buttons will be injected by JS -->
+        </div>
+
+        <!-- Content Area -->
+        <div id="content-area" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 min-h-[400px]">
+            <div class="flex h-full items-center justify-center text-slate-400 pt-20 pb-20">
+                <p>Please click on the regions and categories above to load hotel recommendations...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data structure matching user requirements (with updated links and translations)
+        const hotelData = {
+            "siam": {
+                name: "Siam & Pratunam",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "Siam Kempinski Hotel Bangkok", feature: "The only resort-style 5-star hotel in downtown Bangkok. Rooms offer direct access to a beautiful pool, perfectly combining luxury with shopping convenience.", address: "991/9 Rama I Rd / 3 min walk from BTS Siam, direct access from Siam Paragon.", url: "https://www.trip.com/t/JujjIYT4nT2&locale=en_xx&curr=USD" },
+                        { name: "Centara Grand at CentralWorld", feature: "Located right above CentralWorld mall. High floors feature the famous Red Sky rooftop bar. Satisfy your shopping and nightlife needs all at once.", address: "999/99 Rama 1 Rd / 5-8 min walk from BTS Siam or Chit Lom.", url: "https://www.trip.com/t/8a4qA3V4nT2&locale=en_xx&curr=USD" },
+                        { name: "Waldorf Astoria Bangkok", feature: "Hilton's top-tier luxury brand offering meticulous service and elegant design. Breakfast is renowned as one of the best in Bangkok.", address: "151 Ratchadamri Rd / 3 min walk from BTS Ratchadamri.", url: "https://www.trip.com/t/owfn53W4nT2&locale=en_xx&curr=USD" },
+                        { name: "InterContinental Bangkok", feature: "Classic luxury hotel, recently renovated for a modern touch. Solid service, adjacent to Erawan Shrine and premium shopping districts.", address: "973 Phloen Chit Rd / 2 min walk from BTS Chit Lom.", url: "https://www.trip.com/t/dCYdqgW4nT2&locale=en_xx&curr=USD" },
+                        { name: "Amari Bangkok", feature: "A 5-star landmark in the Pratunam area. Just cross the skybridge to reach Pratunam Market. Perfect for wholesale shopping trips.", address: "847 Phetchaburi Rd / 5 min walk from Airport Link Ratchaprarop.", url: "https://www.trip.com/t/tTGXSXX4nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Novotel Bangkok Platinum Pratunam", feature: "Located above the Platinum Fashion Mall. You can drop off your shopping bags directly in your room. Unbeatable location.", address: "220 Phetchaburi Rd / 10 min walk from BTS Chit Lom, or via skywalk.", url: "https://www.trip.com/t/H2XAdgY4nT2&locale=en_xx&curr=USD" },
+                        { name: "The Berkeley Hotel Pratunam", feature: "A massive budget-friendly hotel in Pratunam. Directly across from the neon night market area. Affordable rates and spacious rooms.", address: "559 Ratchaprarop Rd / 8 min walk from Airport Link Ratchaprarop.", url: "https://www.trip.com/t/ZKvQLdZ4nT2&locale=en_xx&curr=USD" },
+                        { name: "Holiday Inn Express Bangkok Siam", feature: "Close to MBK Center and National Stadium. Standardized chain quality with free breakfast included. Excellent value.", address: "889 Rama I Rd / 2 min walk from BTS National Stadium.", url: "https://www.trip.com/t/08eVlRa4nT2&locale=en_xx&curr=USD" },
+                        { name: "GLOW Pratunam", feature: "Boutique hotel hidden above a mall in Pratunam. Modern and youthful design, a favorite among personal shoppers and independent travelers.", address: "919 Phetchaburi Rd / 10 min walk from Airport Link Ratchaprarop.", url: "" },
+                        { name: "Baiyoke Sky Hotel", feature: "Formerly Thailand's tallest building. While facilities are slightly dated, the high-floor views are unbeatable and prices are very reasonable for the area.", address: "222 Ratchaprarop Rd / 5 min walk from Airport Link Ratchaprarop.", url: "" }
+                    ],
+                    "Hostels": [
+                        { name: "Bed Station Hostel Ratchathewi", feature: "Industrial design with a great lounge atmosphere. Easy to meet international backpackers. Clean and well-equipped.", address: "486/149-150 Phetchaburi 16 / 2 min walk from BTS Ratchathewi.", url: "https://www.trip.com/t/Nf8rrfd4nT2&locale=en_xx&curr=USD" },
+                        { name: "Lub d Bangkok Siam", feature: "One of Bangkok's most famous hostel chains. Vibrant and colorful, located in the heart of the Siam district.", address: "925/9 Rama I Rd / 1 min walk from BTS National Stadium.", url: "https://www.trip.com/t/bvV6VGe4nT2&locale=en_xx&curr=USD" },
+                        { name: "Boxpackers Hostel Pratunam", feature: "Wood-toned hostel designed with a capsule concept. High privacy and top-tier bed comfort among hostels.", address: "39/4 Phetchaburi 15 / 10 min walk from BTS Phaya Thai.", url: "https://www.trip.com/t/G3lET5f4nT2&locale=en_xx&curr=USD" },
+                        { name: "Chao Hostel", feature: "Wooden design incorporating traditional Thai stilt house elements. Quiet and high-quality environment, unlike typical budget hostels.", address: "865 Rama I Rd (same building as Siam@Siam) / 3 min walk from BTS National Stadium.", url: "https://www.trip.com/t/WS9V7hf4nT2&locale=en_xx&curr=USD" },
+                        { name: "The Posh Phayathai", feature: "Billed as a 'boutique hostel'. The rooftop has a beautiful small pool and free snack bar. Adjacent to the Airport Link, perfect transport.", address: "55/21-23 Phayathai Rd / 1 min walk from BTS/Airport Link Phaya Thai.", url: "https://www.trip.com/t/XkXw1Jg4nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            },
+            "sukhumvit": {
+                name: "Sukhumvit",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "Bangkok Marriott Marquis Queen’s Park", feature: "One of the largest 5-star hotels in Bangkok, next to Benchasiri Park. Goji Kitchen's buffet is highly rated.", address: "199 Sukhumvit Soi 22 / 8 min walk from BTS Phrom Phong.", url: "https://www.trip.com/t/KRJ796h4nT2&locale=en_xx&curr=USD" },
+                        { name: "Sofitel Bangkok Sukhumvit", feature: "Strong French elegance, featuring the famous L'Appart rooftop French restaurant and bar. Direct skybridge to BTS.", address: "189 Sukhumvit Rd / 5 min walk from BTS Asok.", url: "https://www.trip.com/t/dJm77ph4nT2&locale=en_xx&curr=USD" },
+                        { name: "Sheraton Grande Sukhumvit", feature: "The tropical jungle-style pool is a major highlight. A well-maintained classic with legendary service.", address: "250 Sukhumvit Rd / 2 min walk from BTS Asok (direct skybridge access).", url: "https://www.trip.com/t/EE9t7oi4nT2&locale=en_xx&curr=USD" },
+                        { name: "The Westin Grande Sukhumvit", feature: "Famous for its 'Heavenly Bed' offering superb sleep quality. Located directly opposite Terminal 21.", address: "259 Sukhumvit Rd / 3 min walk from BTS Asok.", url: "https://www.trip.com/t/b8mynVj4nT2&locale=en_xx&curr=USD" },
+                        { name: "Grande Centre Point Terminal 21", feature: "Located right above Terminal 21 and the BTS interchange. Rooms feature microwaves and washer/dryers. Perfect convenience.", address: "2 Sukhumvit Soi 19 / 1 min walk from BTS Asok.", url: "https://www.trip.com/t/eafgAmk4nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Arte Hotel", feature: "Budget boutique hotel in an alley. The rooftop features an infinity pool with great views. A quiet retreat in a busy area.", address: "29 Sukhumvit Soi 19 / 5 min walk from BTS Asok.", url: "https://www.trip.com/t/NqqzxOm4nT2&locale=en_xx&curr=USD" },
+                        { name: "Holiday Inn Express Bangkok Sukhumvit 11", feature: "Located in the lively Soi 11 nightlife alley, surrounded by bars and restaurants. Ideal for nightlife lovers.", address: "14 Sukhumvit Soi 11 / 8 min walk from BTS Nana.", url: "https://www.trip.com/t/wQog8Up4nT2&locale=en_xx&curr=USD" },
+                        { name: "Travelodge Sukhumvit 11", feature: "Modern, minimalist budget hotel with a small rooftop pool. Surrounded by abundant dining and entertainment options.", address: "14 Sukhumvit Soi 11 / 10 min walk from BTS Nana.", url: "https://www.trip.com/t/VtHtxFr4nT2&locale=en_xx&curr=USD" },
+                        { name: "S15 Sukhumvit Hotel", feature: "Business boutique hotel on the main road. Small but elegantly designed. Just across the street from Korean Town.", address: "217 Sukhumvit Rd / 4 min walk from BTS Asok.", url: "https://www.trip.com/t/WHsZbxr4nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Hostels": [
+                        { name: "3Howw Hostel at Sukhumvit 21", feature: "Hipster style mixing raw concrete and wood. Offers a simple free breakfast and comfortable capsule beds.", address: "32/9 Sukhumvit 21 / 8 min walk from BTS Asok.", url: "https://www.trip.com/t/Jpc8Ops4nT2&locale=en_xx&curr=USD" },
+                        { name: "Rezt Bangkok", feature: "A quiet hostel hidden in the alleys with a MUJI-like aesthetic. Perfect for backpackers who prefer peace and quiet.", address: "75 Sukhumvit Soi 22 / 12 min walk from BTS Phrom Phong.", url: "https://www.trip.com/t/GahgJPv4nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            },
+            "silom": {
+                name: "Silom & Sathorn",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "W Bangkok", feature: "A fashion-forward design icon, full of purple neon and modernity. Next to the famous heritage restaurant The House on Sathorn.", address: "106 North Sathorn Rd / 3 min walk from BTS Chong Nonsi.", url: "https://www.trip.com/t/7cDzJJx4nT2&locale=en_xx&curr=USD" },
+                        { name: "Banyan Tree Bangkok", feature: "A classic luxury hotel in Bangkok. All-suite design, featuring the iconic Moon Bar on the rooftop.", address: "21/100 South Sathon Rd / 10 min walk from MRT Lumphini.", url: "https://www.trip.com/t/hXRmzzx4nT2&locale=en_xx&curr=USD" },
+                        { name: "The Sukhothai Bangkok", feature: "An oasis in central Bangkok. Designed with ancient Sukhothai kingdom aesthetics, offering tranquility and rich cultural heritage.", address: "13/3 South Sathorn Rd / 8 min walk from MRT Lumphini.", url: "https://www.trip.com/t/D9Ipbky4nT2&locale=en_xx&curr=USD" },
+                        { name: "SO/ Bangkok", feature: "The infinity pool overlooking Lumphini Park is stunning. Designed around the five elements by multiple designers.", address: "2 North Sathorn Rd / 3 min walk from MRT Lumphini.", url: "https://www.trip.com/t/fiMISZz4nT2&locale=en_xx&curr=USD" },
+                        { name: "Lebua at State Tower", feature: "Filming location of 'The Hangover Part II'. The domed Sky Bar is a Bangkok night view classic. All rooms have large balconies.", address: "1055 Silom Rd / 10 min walk from BTS Saphan Taksin.", url: "https://www.trip.com/t/LvoLah05nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Ibis Styles Bangkok Silom", feature: "Vibrant and youthful design. The lobby is very photogenic. Convenient transport and affordable prices.", address: "289 Silom Rd / 3 min walk from BTS Sala Daeng.", url: "https://www.trip.com/t/y1YLeY15nT2&locale=en_xx&curr=USD" },
+                        { name: "Furama Silom", feature: "An older budget hotel in Silom. Facilities are slightly dated, but rooms are very spacious, and there's a rooftop pool.", address: "533 Silom Rd / 10 min walk from BTS Chong Nonsi.", url: "https://www.trip.com/t/FDi0my15nT2&locale=en_xx&curr=USD" },
+                        { name: "The Quarter Silom", feature: "Located in a bustling Silom alley. Modern design and comprehensive facilities offer highly competitive value in the area.", address: "12 Silom Soi 6 / 8 min walk from BTS Sala Daeng.", url: "https://www.trip.com/t/lhMx6C35nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Hostels": [
+                        { name: "Kinnon Hostel", feature: "Features an excellent rooftop glasshouse lounge. Clean and bright environment; a highly rated boutique hostel.", address: "37/21-22 Silom Soi 9 / 5 min walk from BTS Chong Nonsi.", url: "https://www.trip.com/t/RprE3R45nT2&locale=en_xx&curr=USD" },
+                        { name: "Warm Window Silom", feature: "The exterior features warm, large arched windows. The wooden design makes it feel very relaxing and comfortable.", address: "50/4 Pan Rd / 12 min walk from BTS Surasak.", url: "https://www.trip.com/t/HGVyEF55nT2&locale=en_xx&curr=USD" },
+                        { name: "Silom Space Hostel", feature: "Located right next to the BTS station for perfect transit. Space-capsule beds provide excellent privacy and sleep quality.", address: "1/2 Silom Soi 2 / 1 min walk from BTS Sala Daeng.", url: "https://www.trip.com/t/t5ISKj55nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            },
+            "oldtown": {
+                name: "Old Town",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "The Siam Hotel", feature: "One of Bangkok's top luxury boutique hotels. Black-and-white colonial design with a private pier and ultimate privacy.", address: "3/2 Khao Rd / Located on the Chao Phraya River, access via hotel shuttle boat or taxi.", url: "https://www.trip.com/t/GUSmxW75nT2&locale=en_xx&curr=USD" },
+                        { name: "Sala Rattanakosin Bangkok", feature: "Enjoy stunning sunsets and night views of Wat Arun right from your room. The most iconic boutique hotel in the Old Town.", address: "39 Maha Rat Rd / 10 min walk from MRT Sanam Chai.", url: "https://www.trip.com/t/8lCNzH85nT2&locale=en_xx&curr=USD" },
+                        { name: "Riva Surya Bangkok", feature: "Located on the riverside near Khaosan Road. A quiet retreat in a busy area, featuring elegant modern Thai style and a river-view pool.", address: "23 Phra Arthit Rd / Near Khaosan Road, taxi or ferry to Phra Arthit Pier recommended.", url: "https://www.trip.com/t/HUBJpo85nT2&locale=en_xx&curr=USD" },
+                        { name: "Chakrabongse Villas", feature: "Converted from a former Thai royal residence. Features only a few rooms with a rich royal history atmosphere and premium service.", address: "396 Maha Rat Rd / 12 min walk from MRT Sanam Chai.", url: "https://www.trip.com/t/8ILot985nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Casa Nithra Bangkok", feature: "A highly popular budget stay in the Old Town with an exquisite rooftop pool. Design blends Thai classical and modern geometry.", address: "176 Samsen Rd / Near Khaosan Road, taxi recommended.", url: "https://www.trip.com/t/M36v2OA5nT2&locale=en_xx&curr=USD" },
+                        { name: "Nouvo City Hotel", feature: "Halal-certified hotel with complete facilities (pool and gym). A bit of a walk to Khaosan Road, making it relatively quiet.", address: "2 Samsen Soi 2 / Taxi recommended.", url: "https://www.trip.com/t/vwe0DLB5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Hostels": [
+                        { name: "Here Hostel Bangkok", feature: "One of Bangkok's most famous hostels, featuring an iconic spiral slide that takes you straight to the ground floor. Great vibe.", address: "196/3-8 Ratchadamnoen Klang Rd / Near Khaosan Road, taxi recommended.", url: "https://www.trip.com/t/08hnmYF5nT2&locale=en_xx&curr=USD" },
+                        { name: "Bed Station Hostel Khaosan", feature: "American retro industrial style. Features a fantastic central pool table and bar, making it very easy to make friends.", address: "120 Tanao Rd / Located in the Khaosan Road area, taxi recommended.", url: "https://www.trip.com/t/aPOLo4G5nT2&locale=en_xx&curr=USD" },
+                        { name: "NapPark Hostel at Khao San", feature: "Multiple-time winner of Asia's best hostel awards. The traditional Thai pavilion lounge is very comfortable and extremely clean.", address: "5 Tanao Rd / Located in the Khaosan Road area, taxi recommended.", url: "https://www.trip.com/t/Lvf30sG5nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            },
+            "riverside": {
+                name: "Riverside",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "Mandarin Oriental Bangkok", feature: "Thailand's most legendary century-old luxury hotel. Top choice for dignitaries and superstars. World-class service and afternoon tea.", address: "48 Oriental Ave / Hotel offers a shuttle boat to BTS Saphan Taksin.", url: "https://www.trip.com/t/nVd0BMI5nT2&locale=en_xx&curr=USD" },
+                        { name: "The Peninsula Bangkok", feature: "Classic W-shaped architecture ensures every room enjoys magnificent river views. Known for vintage luxury and Thai hospitality.", address: "333 Charoen Nakhon Rd / Hotel offers a shuttle boat to BTS Saphan Taksin.", url: "https://www.trip.com/t/8b92tnI5nT2&locale=en_xx&curr=USD" },
+                        { name: "Capella Bangkok", feature: "Newly opened ultra-luxury brand. All rooms face the river, and the infinity pool design is highly private. Features a Michelin 3-star chef.", address: "300/2 Charoen Krung Rd / Hotel offers a private shuttle boat to BTS.", url: "https://www.trip.com/t/s7waPHJ5nT2&locale=en_xx&curr=USD" },
+                        { name: "Four Seasons Hotel Bangkok", feature: "Architecture by top designers, blending water features and art. BKK Social Club is one of Asia's premier bars.", address: "300/1 Charoen Krung Rd / Hotel offers a private shuttle boat to BTS.", url: "https://www.trip.com/t/qpIfAmJ5nT2&locale=en_xx&curr=USD" },
+                        { name: "Shangri-La Bangkok", feature: "Expansive classic riverside 5-star resort. Rich facilities like an urban resort, adjacent to the BTS for the most convenient river transit.", address: "89 Soi Wat Suan Plu / 2 min walk from BTS Saphan Taksin.", url: "https://www.trip.com/t/R1MqsEK5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Ibis Bangkok Riverside", feature: "One of the most budget-friendly riverside options. Features a pool right by the river, offering unbeatable Chao Phraya views at a high value.", address: "27 Soi Charoen Nakhon 17 / Near BTS Krung Thon Buri, taxi transfer recommended.", url: "https://www.trip.com/t/ToXBYXL5nT2&locale=en_xx&curr=USD" },
+                        { name: "Bossotel Bangkok", feature: "Though decor is somewhat dated, the location is phenomenal. Just a few minutes walk to the BTS and pier, an incredibly affordable transit hub.", address: "55/8-14 Soi Charoen Krung 42/1 / 5 min walk from BTS Saphan Taksin.", url: "https://www.trip.com/t/HqVORbM5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Hostels": [
+                        { name: "Bangkok Bed and Bike", feature: "Bicycle-themed retro hostel. The building has classical beauty, and they offer cycling tours of the Old Town.", address: "19/6 Charoen Krung Rd / 5 min walk from MRT Sam Yot.", url: "https://www.trip.com/t/sKi9HTO5nT2&locale=en_xx&curr=USD" },
+                        { name: "River View Guest House", feature: "Hidden deep in an alley. Features an insider's budget rooftop river-view bar with a relaxed, casual vibe.", address: "768 Soi Phanurangsri / Tuk-tuk from Hua Lamphong Station recommended.", url: "https://www.trip.com/t/L2bv2yO5nT2&locale=en_xx&curr=USD" },
+                        { name: "Yolo Hostel", feature: "Family-style hostel with a great atmosphere. The owner is very passionate. Close to IconSiam, just cross the river to reach the bustling downtown.", address: "121/1 Khlong San / Near IconSiam, taxi transfer recommended.", url: "https://www.trip.com/t/6OcdERP5nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            },
+            "chinatown": {
+                name: "Yaowarat Chinatown",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "Shanghai Mansion Bangkok", feature: "Boutique hotel with luxurious retro Shanghai Bund vibes. Instantly transports you to the 1930s. Features a beautiful indoor water courtyard.", address: "479-481 Yaowarat Rd / 5 min walk from MRT Wat Mangkon.", url: "https://www.trip.com/t/iiVxJRQ5nT2&locale=en_xx&curr=USD" },
+                        { name: "ASAI Bangkok Chinatown", feature: "A youthful brand under the Dusit Group, located above I’m Chinatown mall. Fresh design blending Japanese MUJI and Chinese minimalism.", address: "531 Charoen Krung Rd / 2 min walk from MRT Wat Mangkon.", url: "https://www.trip.com/t/rn0DMqQ5nT2&locale=en_xx&curr=USD" },
+                        { name: "W22 by Burasari", feature: "Boutique hotel blending youthful energy with Chinese elements. The atrium has excellent lighting, and rates are relatively affordable for premium stays.", address: "422 Maitri Chit Rd / 6 min walk from MRT Wat Mangkon.", url: "https://www.trip.com/t/hIdjyMS5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Norn Yaowarat Hotel", feature: "Very cozy and clean small budget hotel. Serves a delicious simple breakfast, and the staff is extremely helpful.", address: "202 Phadung Dao Rd / 5 min walk from MRT Wat Mangkon.", url: "https://www.trip.com/t/tXKhdKU5nT2&locale=en_xx&curr=USD" },
+                        { name: "Pho Place", feature: "Quiet accommodation hidden in the alleys of Chinatown. Modest exterior but spacious rooms with high cost performance.", address: "61 Soi Yaowa Phanit / 8 min walk from MRT Wat Mangkon.", url: "https://www.trip.com/t/yCXQbkU5nT2&locale=en_xx&curr=USD" },
+                        { name: "The Krungkasem Srikrung Hotel", feature: "A classic Bangkok budget hotel with a strong retro feel. Located right by the canal and train station with very cheap rates.", address: "1860 Krung Kasem Rd / 3 min walk from MRT Hua Lamphong.", url: "https://www.trip.com/t/s4ZEjNV5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Hostels": [
+                        { name: "Luk Hostel", feature: "The trendiest hostel in Chinatown. The rooftop features a very popular glasshouse bar and lounge with highly designed facilities.", address: "382-384-386 Yaowarat Rd / 5 min walk from MRT Wat Mangkon.", url: "https://www.trip.com/t/0C5ILfW5nT2&locale=en_xx&curr=USD" },
+                        { name: "Ama Hostel Bangkok", feature: "Retains the retro soul of an old house and includes a small pool. Feels as cozy as returning to your grandmother's house in the countryside.", address: "191 Soi Saphan Han / Located within Sampeng wholesale market, walking recommended.", url: "https://www.trip.com/t/zln7SJX5nT2&locale=en_xx&curr=USD" },
+                        { name: "The Unforgotten B&B", feature: "B&B-style hostel filled with classical European and old Shanghai fusion aesthetics. Meticulously decorated and highly photogenic.", address: "102 Soi Nana (Chinatown) / 8 min walk from MRT Hua Lamphong.", url: "https://www.trip.com/t/l5YVQnX5nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            },
+            "ratchada": {
+                name: "Ratchada & Huai Khwang",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "Lancaster Bangkok", feature: "Rooms are extremely spacious with grand modern decor. The rooftop features a scenic pool and a top-tier fitness center.", address: "1777 Phetchaburi Rd / 5 min walk from MRT Phetchaburi.", url: "https://www.trip.com/t/z0ucsnZ5nT2&locale=en_xx&curr=USD" },
+                        { name: "Somerset Rama 9 Bangkok", feature: "Premium serviced apartments. Rooms feature full kitchens and laundry equipment, perfect for long stays or families.", address: "22 Ratchadaphisek Rd / 5 min walk from MRT Phra Ram 9.", url: "https://www.trip.com/t/uXMs9ba5nT2&locale=en_xx&curr=USD" },
+                        { name: "The Emerald Hotel", feature: "Classic large hotel in Huai Khwang. Slightly dated but famous for its lavish buffet and spacious rooms.", address: "99 Ratchadaphisek Rd / 5 min walk from MRT Huai Khwang.", url: "https://www.trip.com/t/JPja0Ib5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Ibis Styles Bangkok Ratchada", feature: "Lively and colorful design. Flawless location right next to the MRT station and bustling night market area.", address: "212 Ratchadaphisek Rd / 1 min walk from MRT Huai Khwang.", url: "https://www.trip.com/t/zo5Ou2e5nT2&locale=en_xx&curr=USD" },
+                        { name: "Amanta Hotel & Residence Ratchada", feature: "Serviced apartment hidden in an alley behind the mall. Features a large tropical green atrium and pool, like an urban oasis.", address: "77-79 Ratchadaphisek Rd / 5 min walk from MRT Thailand Cultural Centre.", url: "https://www.trip.com/t/FVfjHWe5nT2&locale=en_xx&curr=USD" },
+                        { name: "Prom Ratchada Hotel", feature: "Simple, clean, and affordable. Located right around the Ratchada Train Night Market (now The One Ratchada).", address: "558 Ratchadaphisek Soi 7 / 8 min walk from MRT Thailand Cultural Centre.", url: "https://www.trip.com/t/b6d135f5nT2&locale=en_xx&curr=USD" },
+                        { name: "Ratchada Boutique Hotel", feature: "A dark-toned, modern budget hotel. Rooms are small but exquisite, suitable for young travelers and couples.", address: "121 Ratchadaphisek Soi 17 / 5 min walk from MRT Sutthisan.", url: "https://www.trip.com/t/pGWspqf5nT2&locale=en_xx&curr=USD" },
+                        { name: "Mybed Ratchada", feature: "Modern economy hotel selling on minimalism and ultra-low prices. The MRT station is just across the street.", address: "8/71 Ratchadaphisek Rd / 1 min walk from MRT Lat Phrao.", url: "https://www.trip.com/t/5GU9Fbg5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Hostels": [
+                        { name: "Siamaze Hostel", feature: "Offers rare hostel double and family rooms. Hosts free Thai cooking classes on weekends.", address: "90 Ratchadaphisek Soi 17 / 10 min walk from MRT Sutthisan.", url: "https://www.trip.com/t/m65siNh5nT2&locale=en_xx&curr=USD" },
+                        { name: "Sova Hotel & Hostel", feature: "Raw concrete industrial style. Beds are spacious, comfortable, and extremely clean. The lobby feels like a highly textured hipster cafe.", address: "309/20 Ratchadaphisek Rd / 5 min walk from MRT Huai Khwang.", url: "https://www.trip.com/t/EBiNR5i5nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            },
+            "chatuchak": {
+                name: "Chatuchak & Ari",
+                categories: {
+                    "5-Star Hotels": [
+                        { name: "Centara Grand at Central Plaza Ladprao", feature: "Integrated with the large Central Ladprao mall, making shopping and dining extremely convenient. Rooms overlook the vast Chatuchak Park.", address: "1695 Phahonyothin Rd / 2 min walk from BTS Ha Yaek Lat Phrao.", url: "https://www.trip.com/t/OvA2ZUk5nT2&locale=en_xx&curr=USD" },
+                        { name: "The Quarter Ari by UHG", feature: "A landmark 4-star hotel in Ari. The rooftop infinity pool and gym offer excellent views. Stylish and modern.", address: "428 Phahonyothin Rd / 8 min walk from BTS Ari.", url: "https://www.trip.com/t/eBRMo7l5nT2&locale=en_xx&curr=USD" },
+                        { name: "Best Western Chatuchak", feature: "A fresh chain hotel near Chatuchak Market. Facilities are very clean and modern. Top choice for wholesale shoppers or weekend market visitors.", address: "104 Phahonyothin Rd / 2 min walk from MRT Kamphaeng Phet.", url: "https://www.trip.com/t/UFRdwZl5nT2&locale=en_xx&curr=USD" },
+                        { name: "Josh Hotel", feature: "A must-visit retro boutique hotel for Instagrammers! Mint green pool and American retro decor everywhere.", address: "19/2 Ari Soi 4 (Nua) / 8 min walk from BTS Ari.", url: "https://www.trip.com/t/i7YYp6m5nT2&locale=en_xx&curr=USD" },
+                        { name: "Vibe Hotel Bangkok", feature: "Vibrant and youthful brand. Colorful and design-oriented. Very close to Chatuchak and the BTS station.", address: "59 Phahonyothin Rd / 5 min walk from BTS Sena Nikhom.", url: "https://www.trip.com/t/JQAfnhm5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Budget Hotels": [
+                        { name: "Suda Palace Hotel", feature: "Leans towards an old-school Thai hotel, but perfectly located next to the Saphan Khwai check-in hotspot, and prices are extremely cheap.", address: "245 Pradiphat Rd / 5 min walk from BTS Saphan Khwai.", url: "https://www.trip.com/t/62ni8Un5nT2&locale=en_xx&curr=USD" },
+                        { name: "The Yard Bangkok (Private Rooms)", feature: "Originally a famous hostel. Its private rooms are built from shipping containers, surrounded by garden greenery. Super chill vibe.", address: "51 Phahonyothin Soi 5 / 8 min walk from BTS Ari.", url: "https://www.trip.com/t/pg73Tso5nT2&locale=en_xx&curr=USD" },
+                        { name: "Craftsman Bangkok", feature: "Despite a budget-friendly price, it features high-quality decor and a stunning pool. The Baby Bar downstairs is a popular photo spot.", address: "34-36 Phahonyothin Soi 11 / Tuk-tuk or taxi recommended.", url: "https://www.trip.com/t/I41bOZp5nT2&locale=en_xx&curr=USD" }
+                    ],
+                    "Hostels": [
+                        { name: "Bed to Bangkok", feature: "Walking distance to Chatuchak Market! Pure white minimalist design with a comfortable public reading and workspace.", address: "1021/1 Phahonyothin Rd / 5 min walk from BTS Mo Chit.", url: "https://www.trip.com/t/ch9YKfq5nT2&locale=en_xx&curr=USD" },
+                        { name: "Udee Bangkok Hostel", feature: "Cozy hostel converted from an old house. Serves simple but delicious homemade Thai breakfast. Feels like staying at a local friend's home.", address: "49 Pradiphat Soi 19 / 12 min walk from BTS Saphan Khwai.", url: "https://www.trip.com/t/d8cPKCr5nT2&locale=en_xx&curr=USD" }
+                    ]
+                }
+            }
+        };
+
+        const districtContainer = document.getElementById('district-buttons');
+        const categoryContainer = document.getElementById('category-buttons');
+        const contentArea = document.getElementById('content-area');
+        
+        let currentDistrictKey = null;
+        let currentCategoryName = null;
+
+        const categoriesList = ["5-Star Hotels", "Budget Hotels", "Hostels"];
+
+        // 1. Initialize District Buttons
+        function initDistrictButtons() {
+            Object.keys(hotelData).forEach(key => {
+                const btn = document.createElement('button');
+                btn.className = `px-4 py-3 rounded-lg font-bold text-sm transition-all duration-200 border area-btn-inactive`;
+                btn.innerText = hotelData[key].name;
+                btn.onclick = () => selectDistrict(key, btn);
+                districtContainer.appendChild(btn);
+            });
+        }
+
+        // 2. Select District
+        function selectDistrict(key, activeBtn) {
+            currentDistrictKey = key;
+
+            // Update district button appearance
+            const allBtns = districtContainer.querySelectorAll('button');
+            allBtns.forEach(btn => {
+                btn.classList.remove('area-btn-active');
+                btn.classList.add('area-btn-inactive');
+            });
+            activeBtn.classList.remove('area-btn-inactive');
+            activeBtn.classList.add('area-btn-active');
+
+            // Show category buttons
+            categoryContainer.classList.remove('hidden');
+            renderCategoryButtons();
+        }
+
+        // 3. Render Category Buttons
+        function renderCategoryButtons() {
+            categoryContainer.innerHTML = '';
+            
+            categoriesList.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = `px-4 py-2 rounded-lg font-bold text-sm transition-all duration-200 border cat-btn-inactive`;
+                btn.innerText = cat;
+                btn.onclick = () => selectCategory(cat, btn);
+                categoryContainer.appendChild(btn);
+            });
+
+            // Auto-select the first category (5-Star Hotels)
+            const firstCatBtn = categoryContainer.querySelector('button');
+            if(firstCatBtn) {
+                selectCategory(categoriesList[0], firstCatBtn);
+            }
+        }
+
+        // 4. Select Category & Render Hotel List
+        function selectCategory(categoryName, activeBtn) {
+            currentCategoryName = categoryName;
+
+            // Update category button appearance
+            const allBtns = categoryContainer.querySelectorAll('button');
+            allBtns.forEach(btn => {
+                btn.classList.remove('cat-btn-active');
+                btn.classList.add('cat-btn-inactive');
+            });
+            activeBtn.classList.remove('cat-btn-inactive');
+            activeBtn.classList.add('cat-btn-active');
+
+            renderHotels();
+        }
+
+        // 5. Render Hotel Data to View
+        function renderHotels() {
+            const districtData = hotelData[currentDistrictKey];
+            const hotels = districtData.categories[currentCategoryName] || [];
+
+            let htmlContent = `
+                <div class="flex items-center mb-6 border-b pb-4 border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mr-3">📍 ${districtData.name}</h2>
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-bold rounded-full">${currentCategoryName}</span>
+                </div>
+            `;
+
+            if (hotels.length === 0) {
+                htmlContent += `<p class="text-slate-500 py-10 text-center">No recommendations available for this category currently.</p>`;
+            } else {
+                htmlContent += `<div class="space-y-4">`;
+                
+                hotels.forEach((hotel, index) => {
+                    // Check if URL is provided to determine the styling of the [View Hotel Details] link
+                    const linkTagHTML = hotel.url 
+                        ? `<a href="${hotel.url}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-3 py-1 mt-1 sm:mt-0 rounded-md text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 transition-colors shadow-sm cursor-pointer ml-0 sm:ml-3">
+                               <svg class="mr-1 h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                               View Hotel Details
+                           </a>`
+                        : `<span class="inline-flex items-center px-3 py-1 mt-1 sm:mt-0 rounded-md text-xs font-bold bg-slate-200 text-slate-500 ml-0 sm:ml-3">
+                               View Hotel Details
+                           </span>`;
+
+                    htmlContent += `
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg hover:shadow-md transition-shadow duration-200 group">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-start mb-4">
+                                <h4 class="text-lg font-bold text-slate-800 flex items-center">
+                                    <span class="text-blue-500 font-mono text-base mr-2">${index + 1}.</span> 
+                                    ${hotel.name}
+                                </h4>
+                                ${linkTagHTML}
+                            </div>
+                            <div class="pl-6 space-y-3">
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    <span class="font-bold text-slate-700 bg-blue-50 px-1.5 py-0.5 rounded mr-1">Feature</span> ${hotel.feature}
+                                </p>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    <span class="font-bold text-slate-700 bg-slate-200 px-1.5 py-0.5 rounded mr-1">Address/Transport</span> ${hotel.address}
+                                </p>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                htmlContent += `</div>`;
+            }
+
+            contentArea.innerHTML = htmlContent;
+        }
+
+        // Initialize when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initDistrictButtons();
+            
+            // Expand the first district (Siam) by default
+            const firstDistrictBtn = districtContainer.querySelector('button');
+            if(firstDistrictBtn) {
+                selectDistrict('siam', firstDistrictBtn);
+            }
+        });
+    </script>
+</body>
+</html>

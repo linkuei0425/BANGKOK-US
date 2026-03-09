@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bangkok Pass - Travel Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        body { background-color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        .app-container { max-width: 414px; margin: 0 auto; background-color: #f9fafb; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1); overflow-x: hidden; }
+        .bg-bangkok-gradient { background: linear-gradient(135deg, #0ea5e9 0%, #14b8a6 100%); }
+        .bg-attraction-gradient { background: linear-gradient(135deg, #6b21a8 0%, #c026d3 100%); }
+        .bg-food-gradient { background: linear-gradient(135deg, #ea580c 0%, #e11d48 100%); }
+        .bg-itinerary-gradient { background: linear-gradient(135deg, #059669 0%, #0284c7 100%); }
+        .bg-hotel-gradient { background: linear-gradient(135deg, #4338ca 0%, #3b82f6 100%); }
+        .bg-essentials-gradient { background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%); }
+        .bg-river-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        select { -webkit-appearance: none; appearance: none; }
+        optgroup { font-weight: bold; background-color: #1f2937; color: #38bdf8; }
+        option { font-weight: normal; color: white; }
+        .dyn-tab-content { display: none; animation: fadeIn 0.3s ease-out; }
+        .dyn-tab-content.active { display: block; }
+        .carousel-track { display: flex; transition: transform 0.5s ease-out; }
+    </style>
+</head>
+<body>
+
+<div class="app-container pb-20">
+    
+    <!-- Top Header -->
+    <div class="bg-bangkok-gradient text-white pt-6 pb-4 px-5 rounded-b-[2rem] shadow-md relative z-20">
+        <div class="flex justify-between items-center">
+            <div>
+                <p id="datetime-display" class="text-[10px] font-medium text-teal-50 tracking-wide opacity-90">Loading time...</p>
+                <p id="weather-display" class="text-xs opacity-100 font-bold flex items-center gap-1"><i class="ph ph-sun-dim"></i> Loading weather...</p>
+                <h1 class="text-2xl font-extrabold tracking-tight mt-0.5">Bangkok Pass</h1>
+            </div>
+            <div class="flex gap-2">
+                <a href="https://linkuei0425.github.io/BANGKOK/index.html" target="_blank" rel="noopener noreferrer" class="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm active:scale-90 transition-transform text-sm font-bold">繁</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carousel Section -->
+    <div class="px-5 mt-4 relative overflow-hidden">
+        <div id="carousel-track" class="carousel-track gap-3">
+            <div class="shrink-0 w-[90%] h-44 relative rounded-2xl overflow-hidden shadow-lg border border-white/20">
+                <img src="https://i.imgur.com/N03fXCW.jpg" class="w-full h-full object-cover" alt="Wat Arun">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3"><span class="text-white font-bold text-sm tracking-wide">Stunning Bangkok Sunsets</span></div>
+            </div>
+            <div class="shrink-0 w-[90%] h-44 relative rounded-2xl overflow-hidden shadow-lg border border-white/20">
+                <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover" alt="Food">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3"><span class="text-white font-bold text-sm tracking-wide">Local's Secret Food Guide</span></div>
+            </div>
+            <div class="shrink-0 w-[90%] h-44 relative rounded-2xl overflow-hidden shadow-lg border border-white/20">
+                <img src="https://i.imgur.com/qSCqF9r.jpg" class="w-full h-full object-cover" alt="Market">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3"><span class="text-white font-bold text-sm tracking-wide">Explore Indie Markets</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Navigation Tools -->
+    <div class="px-5 mt-4">
+        <h2 class="text-sm font-bold text-gray-500 mb-4 px-1">Quick Navigation</h2>
+        <div class="grid grid-cols-4 gap-y-6 gap-x-3">
+            <button onclick="window.openModal('airportModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-sky-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(14,165,233,0.2)]"><i class="ph ph-airplane-tilt text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Airport</span></button>
+            <button onclick="window.openModal('mapModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-teal-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(20,184,166,0.2)]"><i class="ph ph-train-regional text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">BTS/MRT</span></button>
+            <button onclick="window.openModal('boatModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-blue-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(59,130,246,0.2)]"><i class="ph ph-boat text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Boats</span></button>
+            <button onclick="window.openModal('attractionModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-purple-600 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(147,51,234,0.2)]"><i class="ph ph-camera text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Attractions</span></button>
+            
+            <!-- External Links -->
+            <button onclick="window.open('https://linkuei0425.github.io/BANGKOK-US/food.html', '_blank')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-orange-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(249,115,22,0.2)]"><i class="ph ph-fork-knife text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Food</span></button>
+            <button onclick="window.open('https://linkuei0425.github.io/BANGKOK-US/shopping.html', '_blank')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-rose-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(244,63,94,0.2)]"><i class="ph ph-handbag text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Shopping</span></button>
+            <button onclick="window.openModal('itineraryModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-pink-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(236,72,153,0.2)]"><i class="ph ph-calendar-check text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Itinerary</span></button>
+            
+            <button onclick="window.open('https://linkuei0425.github.io/BANGKOK-US/trip.html', '_blank')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-emerald-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(16,185,129,0.2)]"><i class="ph ph-ticket text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Tours</span></button>
+            
+            <button onclick="window.open('https://linkuei0425.github.io/BANGKOK-US/hotel.html', '_blank')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-indigo-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(99,102,241,0.2)]"><i class="ph ph-bed text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Hotels</span></button>
+            
+            <!-- NEW Global Pass Button -->
+            <button onclick="window.open('https://linkuei0425.github.io/BANGKOK-US/go.html', '_blank')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-blue-600 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(37,99,235,0.2)]"><i class="ph ph-globe-hemisphere-west text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Global Pass</span></button>
+
+            <button onclick="window.openModal('essentialsModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-violet-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(139,92,246,0.2)]"><i class="ph ph-suitcase text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Essentials</span></button>
+            <button onclick="window.openModal('aboutModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-slate-600 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(71,85,105,0.2)]"><i class="ph ph-info text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">About Us</span></button>
+            
+            <button onclick="window.openModal('fanModal')" class="flex flex-col items-center gap-2 group"><div class="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-red-500 group-active:scale-90 transition-transform shadow-[0_4px_10px_rgba(239,68,68,0.2)]"><i class="ph ph-heart text-3xl"></i></div><span class="text-[11px] font-bold text-gray-700 text-center">Follow Us</span></button>
+        </div>
+    </div>
+
+    <!-- ==================== Modals ==================== -->
+
+    <!-- Airport Modal -->
+    <div id="airportModal" class="fixed inset-0 bg-slate-950 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto shadow-2xl">
+        <div class="bg-gradient-to-br from-cyan-600 to-blue-700 text-white pt-10 pb-6 px-5 flex justify-between items-center shadow-md z-10">
+            <h2 class="font-bold text-lg"><i class="ph-fill ph-airplane-tilt mr-1"></i> Airport Guide</h2>
+            <button onclick="window.closeModal('airportModal')"><i class="ph ph-x text-2xl"></i></button>
+        </div>
+        <div class="bg-slate-900 px-4 pt-3 z-10">
+            <div class="flex gap-2 border-b border-slate-800 pb-2 overflow-x-auto no-scrollbar">
+                <button onclick="window.switchAirportTab('bkk')" id="btn-airport-bkk" class="flex-1 bg-cyan-600 text-white py-2 px-3 rounded-lg text-sm font-bold shadow-md transition-all whitespace-nowrap">Suvarnabhumi (BKK)</button>
+                <button onclick="window.switchAirportTab('dmk')" id="btn-airport-dmk" class="flex-1 bg-slate-800 text-slate-300 border border-slate-700 py-2 px-3 rounded-lg text-sm font-bold transition-all whitespace-nowrap">Don Mueang (DMK)</button>
+            </div>
+        </div>
+        <div class="p-4 flex-1 overflow-y-auto bg-slate-900 text-white no-scrollbar">
+            
+            <!-- BKK Content -->
+            <div id="airport-bkk" class="space-y-4 pb-8 animate-[fadeIn_0.3s_ease-out]">
+                <a href="https://affiliate.klook.com/redirect?aid=114993&aff_adid=1231983&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Factivity%2F30353-private-city-transfers-bangkok-pattaya-ayutthaya-hua-hin%2F" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform mb-2">
+                    <i class="ph-fill ph-car-profile text-xl"></i> Book Premium Transfer
+                </a>
+                <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-cyan-400 font-bold text-sm mb-2 flex items-center gap-2"><i class="ph-fill ph-train text-lg"></i> (1) Airport Rail Link (ARL)</h3>
+                    <ul class="text-[11px] text-slate-300 space-y-2 leading-relaxed pl-1">
+                        <li><span class="text-white font-bold">Location:</span> Basement B1 Level.</li>
+                        <li><span class="text-white font-bold">Duration:</span> ~26-30 mins to Phaya Thai (Terminal Station).</li>
+                        <li><span class="text-white font-bold">Transfers:</span><br>
+                        • Makkasan Station (A6): Transfer to MRT Blue Line (Phetchaburi Station).<br>
+                        • Phaya Thai Station (A8): Transfer to BTS Sukhumvit Line.</li>
+                        <li><span class="text-white font-bold">Hours:</span> 05:30 – 24:00 (Every 10-15 mins).</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-cyan-400 font-bold text-sm mb-2 flex items-center gap-2"><i class="ph-fill ph-taxi text-lg"></i> (2) Public Taxi</h3>
+                    <ul class="text-[11px] text-slate-300 space-y-2 leading-relaxed pl-1">
+                        <li><span class="text-white font-bold">Location:</span> Level 1, outside Gates 4 and 7. Get a ticket from the kiosk.</li>
+                        <li><span class="text-white font-bold">Cost:</span> Metered fare + 50 THB Airport Surcharge + Toll fees (~75 THB). Total ~350-500 THB.</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-cyan-400 font-bold text-sm mb-2 flex items-center gap-2"><i class="ph-fill ph-device-mobile text-lg"></i> (3) Ride-Hailing (Grab / Bolt)</h3>
+                    <ul class="text-[11px] text-slate-300 space-y-2 leading-relaxed pl-1">
+                        <li><span class="text-white font-bold">Location:</span> Dedicated pick-up points (usually Level 1 outside Gates 4 or 7).</li>
+                        <li><span class="text-white font-bold">Pros:</span> Transparent pricing and varied car types.</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-cyan-400 font-bold text-sm mb-2 flex items-center gap-2"><i class="ph-fill ph-bus text-lg"></i> (4) LimoBus Express</h3>
+                    <ul class="text-[11px] text-slate-300 space-y-2 leading-relaxed pl-1">
+                        <li><span class="text-white font-bold">Routes:</span> 2 lines heading to Khao San Road and Silom/Siam.</li>
+                        <li><span class="text-white font-bold">Cost:</span> ~150 THB. Direct access to tourist hubs.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- DMK Content -->
+            <div id="airport-dmk" class="hidden space-y-4 pb-8 animate-[fadeIn_0.3s_ease-out]">
+                <a href="https://affiliate.klook.com/redirect?aid=114993&aff_adid=1231983&k_site=https%3A%2F%2Fwww.klook.com%2Fen-US%2Factivity%2F30353-private-city-transfers-bangkok-pattaya-ayutthaya-hua-hin%2F" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform mb-2">
+                    <i class="ph-fill ph-car-profile text-xl"></i> Book Premium Transfer
+                </a>
+                <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-blue-400 font-bold text-sm mb-2 flex items-center gap-2"><i class="ph-fill ph-train text-lg"></i> (1) SRT Red Line</h3>
+                    <ul class="text-[11px] text-slate-300 space-y-2 leading-relaxed pl-1">
+                        <li><span class="text-white font-bold">Location:</span> 10-15 mins walk following signs.</li>
+                        <li><span class="text-white font-bold">Route:</span> Airport → Krung Thep Aphiwat Central Terminal (Bang Sue).</li>
+                        <li><span class="text-white font-bold">Cost & Time:</span> ~33 THB, approx 17-20 mins.</li>
+                        <li><span class="text-white font-bold">Transfer:</span> Switch to MRT Blue Line at the Central Terminal.</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-blue-400 font-bold text-sm mb-2 flex items-center gap-2"><i class="ph-fill ph-bus text-lg"></i> (2) Airport Bus (A1-A4)</h3>
+                    <p class="text-[10px] text-yellow-300 mb-2 pl-1">— Best for BTS transfers</p>
+                    <ul class="text-[11px] text-slate-300 space-y-2 leading-relaxed pl-1">
+                        <li><span class="text-white font-bold">Location:</span> T1 Exit 6 or T2 Exit 12.</li>
+                        <li><span class="text-white font-bold">Route A1 (30 THB):</span> To BTS Mo Chit / MRT Chatuchak. Every 5 mins (Highly Recommended).</li>
+                        <li><span class="text-white font-bold">Route A2 (30 THB):</span> To Victory Monument.</li>
+                        <li><span class="text-white font-bold">Route A4 (60 THB):</span> To Khao San Road.</li>
+                    </ul>
+                </div>
+                <div class="bg-slate-800/80 rounded-xl p-4 border border-slate-700">
+                    <h3 class="text-blue-400 font-bold text-sm mb-2 flex items-center gap-2"><i class="ph-fill ph-taxi text-lg"></i> (3) Public Taxi</h3>
+                    <ul class="text-[11px] text-slate-300 space-y-2 leading-relaxed pl-1">
+                        <li><span class="text-white font-bold">Location:</span> Dedicated taxi stand outside Arrivals.</li>
+                        <li><span class="text-white font-bold">Cost:</span> Metered fare + 50 THB Airport Surcharge + Tolls. Total ~250-400 THB.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- MRT Modal -->
+    <div id="mapModal" class="fixed inset-0 bg-gray-900 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto">
+        <div class="pt-10 pb-6 px-5 flex justify-between items-center border-b border-gray-800 shadow-md">
+            <div class="flex items-center gap-2"><i class="ph-fill ph-train-regional text-2xl text-teal-400"></i><div><h2 class="text-white font-bold text-lg leading-tight">Transit Planner</h2><p class="text-[10px] text-gray-400">Bangkok BTS/MRT Navigation</p></div></div>
+            <button onclick="window.closeModal('mapModal')" class="text-white bg-white/10 p-1.5 rounded-full"><i class="ph ph-x text-xl"></i></button>
+        </div>
+        <div class="p-5 flex-1 overflow-y-auto bg-gray-900 no-scrollbar text-white">
+            <div class="relative bg-gray-800/50 p-4 rounded-2xl border border-gray-700">
+                <div class="absolute left-[29px] top-9 bottom-12 w-0.5 bg-gray-600 border-dashed border-l-2"></div>
+                <div class="flex items-center gap-3 mb-4 relative z-10">
+                    <div class="w-3 h-3 rounded-full bg-teal-400 shrink-0 shadow-[0_0_8px_rgba(45,212,191,0.8)]"></div>
+                    <div class="relative w-full"><select id="mrt-origin" class="w-full bg-gray-900 text-white border border-gray-600 rounded-xl p-3 pr-8 focus:outline-none focus:border-teal-400 text-sm"><option value="" disabled selected>Select Origin...</option></select><i class="ph ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i></div>
+                </div>
+                <div class="flex items-center gap-3 relative z-10 mb-4">
+                    <div class="w-3 h-3 rounded-full bg-rose-500 shrink-0 shadow-[0_0_8px_rgba(244,63,94,0.8)]"></div>
+                    <div class="relative w-full"><select id="mrt-dest" class="w-full bg-gray-900 text-white border border-gray-600 rounded-xl p-3 pr-8 focus:outline-none focus:border-rose-400 text-sm"><option value="" disabled selected>Select Destination...</option></select><i class="ph ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i></div>
+                </div>
+                <button onclick="window.calcMrt()" class="w-full bg-teal-600 text-white font-bold py-3 rounded-xl active:scale-95 transition-transform shadow-lg relative z-10">Plan Route</button>
+            </div>
+            
+            <div id="mrt-result" class="hidden mt-6 animate-[fadeIn_0.3s]">
+                <div class="bg-gray-800 rounded-2xl p-5 border border-teal-900/50 shadow-lg">
+                    <div class="flex justify-between items-end border-b border-gray-700 pb-3 mb-4">
+                        <div><p class="text-[10px] text-gray-400 mb-0.5">Total Stops</p><div id="mrt-stops-count" class="text-xl font-bold text-teal-400"></div></div>
+                        <div class="text-right"><p class="text-[10px] text-gray-400 mb-0.5">Estimated Time</p><span id="mrt-time" class="text-lg font-bold text-white mr-2"></span></div>
+                    </div>
+                    <div id="mrt-path-detail" class="text-sm text-gray-200"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boat Modal -->
+    <div id="boatModal" class="fixed inset-0 bg-slate-950 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto">
+        <div class="bg-river-gradient pt-10 pb-6 px-5 flex justify-between items-center text-white shadow-md">
+            <div class="flex items-center gap-2"><i class="ph-fill ph-boat text-2xl text-blue-200"></i><div><h2 class="font-bold text-lg leading-tight">Boat Navigation</h2><p class="text-[10px] text-blue-200">Orange/Blue Flag, Khlong Saen Saep</p></div></div>
+            <button onclick="window.closeModal('boatModal')" class="bg-white/20 p-1.5 rounded-full"><i class="ph ph-x text-xl"></i></button>
+        </div>
+        <div class="p-5 flex-1 overflow-y-auto bg-slate-900 text-white no-scrollbar">
+            <div class="relative bg-slate-800/50 p-4 rounded-2xl border border-slate-700">
+                <div class="absolute left-[29px] top-9 bottom-12 w-0.5 bg-slate-600 border-dashed border-l-2"></div>
+                <div class="flex items-center gap-3 mb-4 relative z-10">
+                    <div class="w-3 h-3 rounded-full bg-blue-400 shrink-0 shadow-[0_0_8px_rgba(96,165,250,0.8)]"></div>
+                    <div class="relative w-full"><select id="boat-origin" class="w-full bg-slate-900 text-white border border-slate-600 rounded-xl p-3 pr-8 focus:outline-none focus:border-blue-400 text-sm"><option value="" disabled selected>Select Origin...</option></select><i class="ph ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i></div>
+                </div>
+                <div class="flex items-center gap-3 relative z-10 mb-4">
+                    <div class="w-3 h-3 rounded-full bg-orange-500 shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.8)]"></div>
+                    <div class="relative w-full"><select id="boat-dest" class="w-full bg-slate-900 text-white border border-slate-600 rounded-xl p-3 pr-8 focus:outline-none focus:border-orange-400 text-sm"><option value="" disabled selected>Select Destination...</option></select><i class="ph ph-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i></div>
+                </div>
+                <button onclick="window.calcBoat()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl active:scale-95 transition-transform shadow-lg relative z-10">Plan Route</button>
+            </div>
+            <div id="boat-result" class="hidden mt-6 bg-slate-800 rounded-2xl p-5 border border-blue-900/50 space-y-4 shadow-lg animate-[fadeIn_0.3s]">
+                <div class="flex justify-between items-end border-b border-slate-700 pb-3">
+                    <div><p class="text-[10px] text-slate-400 mb-0.5">Total Stops</p><span id="boat-stops-count" class="text-xl font-bold text-blue-400"></span></div>
+                    <div class="text-right"><p class="text-[10px] text-slate-400 mb-0.5">Est. Time & Fare</p><span id="boat-time" class="text-lg font-bold text-white mr-2"></span><span id="boat-fare" class="text-sm text-amber-400 font-bold bg-amber-400/10 px-2 py-1 rounded">฿16-30</span></div>
+                </div>
+                <div id="boat-path-detail" class="pt-2 text-sm text-gray-200 space-y-3 relative pl-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attractions Modal -->
+    <div id="attractionModal" class="fixed inset-0 bg-purple-950 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto shadow-2xl">
+        <div class="bg-attraction-gradient text-white pt-10 pb-6 px-5 flex justify-between items-center shadow-md z-10"><h2 class="font-bold text-lg">Explore Attractions</h2><button onclick="window.closeModal('attractionModal')"><i class="ph ph-x text-2xl"></i></button></div>
+        <div class="p-4 flex-1 overflow-y-auto bg-purple-950 no-scrollbar text-white relative">
+            <div id="attr-cat-grid" class="grid grid-cols-4 gap-2"></div>
+            <div id="attr-detail-view" class="hidden animate-[fadeIn_0.3s]">
+                <button onclick="window.resetAttrView()" class="mb-3 text-fuchsia-300 flex items-center gap-1 bg-purple-900/50 px-3 py-1.5 rounded-lg text-sm"><i class="ph ph-arrow-left"></i> Back to Categories</button>
+                <div id="attr-subcat-tabs" class="flex gap-2 mb-3 overflow-x-auto no-scrollbar"></div>
+                <div class="relative">
+                    <select id="attraction-select" class="w-full bg-purple-900 border border-purple-700 rounded-xl p-3 pr-8 mb-4 focus:outline-none focus:border-fuchsia-400 text-sm"></select>
+                    <i class="ph ph-caret-down absolute right-3 top-4 text-purple-400 pointer-events-none"></i>
+                </div>
+                <div id="attr-result" class="hidden space-y-4 pb-8">
+                    <img id="attr-img" class="w-full h-44 object-cover rounded-2xl shadow-xl" src="" alt="Image">
+                    <div class="bg-purple-900/50 p-5 rounded-2xl border border-purple-800 space-y-3">
+                        <h3 id="attr-name" class="font-bold text-xl"></h3>
+                        <p id="attr-desc" class="text-sm text-purple-100 leading-relaxed"></p>
+                        <div class="pt-3 border-t border-purple-800/50 space-y-2.5">
+                            <p class="text-[11px] text-amber-300 flex items-start gap-1.5"><i class="ph-fill ph-clock mt-0.5 shrink-0 text-sm"></i> <span id="attr-hours" class="leading-relaxed font-mono"></span></p>
+                            <p class="text-[11px] text-teal-300 flex items-start gap-1.5"><i class="ph-fill ph-navigation-arrow mt-0.5 shrink-0 text-sm"></i> <span id="attr-transport" class="leading-relaxed"></span></p>
+                            <p class="text-[11px] text-gray-300 flex items-start gap-1.5"><i class="ph-fill ph-map-pin mt-0.5 shrink-0 text-sm"></i> <span id="attr-address" class="leading-relaxed font-mono"></span></p>
+                        </div>
+                    </div>
+                    <div id="attr-tabs-header" class="flex gap-2 overflow-x-auto no-scrollbar pb-1"></div>
+                    <div id="attr-tabs-container" class="space-y-2"></div>
+                    <a id="attr-map-link" href="#" target="_blank" class="block w-full bg-blue-600 text-center py-3.5 rounded-xl font-bold shadow-lg mt-2">Open in Google Maps</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Itinerary Modal -->
+    <div id="itineraryModal" class="fixed inset-0 bg-teal-950 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto">
+        <div class="bg-itinerary-gradient text-white pt-10 pb-6 px-5 flex justify-between items-center shadow-md z-10"><h2 class="font-bold text-lg">Perfect Itinerary</h2><button onclick="window.closeModal('itineraryModal')"><i class="ph ph-x text-2xl"></i></button></div>
+        <div class="p-4 flex-1 overflow-y-auto bg-teal-950 no-scrollbar text-white">
+            <div class="flex gap-2 mb-5 overflow-x-auto no-scrollbar pb-1" id="itin-tabs-header">
+                <button onclick="window.renderItin('day1')" id="btn-itin-day1" class="itin-btn bg-teal-600 px-4 py-2 rounded-lg text-xs font-bold shadow-md shrink-0">Day 1: Classic Culture</button>
+                <button onclick="window.renderItin('day2')" id="btn-itin-day2" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Day 2: Trendy Shopping</button>
+                <button onclick="window.renderItin('day3')" id="btn-itin-day3" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Day 3: Floating Markets</button>
+                <button onclick="window.renderItin('day4')" id="btn-itin-day4" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Day 4: Indie Markets</button>
+                <button onclick="window.renderItin('day5')" id="btn-itin-day5" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Day 5: Riverside Art</button>
+                <button onclick="window.renderItin('ayutthaya')" id="btn-itin-ayutthaya" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Ayutthaya: History</button>
+                <button onclick="window.renderItin('kanchanaburi')" id="btn-itin-kanchanaburi" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Kanchanaburi: Nature</button>
+                <button onclick="window.renderItin('huahin')" id="btn-itin-huahin" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Hua Hin: Coastline</button>
+                <button onclick="window.renderItin('pattaya')" id="btn-itin-pattaya" class="itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0">Pattaya: Sea Views</button>
+            </div>
+            <div id="itin-list" class="space-y-5 pb-8 relative"></div>
+        </div>
+    </div>
+
+    <!-- Essentials Modal -->
+    <div id="essentialsModal" class="fixed inset-0 bg-slate-900 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto shadow-2xl">
+        <div class="bg-essentials-gradient text-white pt-10 pb-6 px-5 flex justify-between items-center"><h2 class="font-bold text-lg">Travel Essentials</h2><button onclick="window.closeModal('essentialsModal')"><i class="ph ph-x text-2xl"></i></button></div>
+        <div class="bg-slate-900 px-4 pt-3 z-10"><div class="flex gap-2 border-b border-slate-800 pb-2">
+            <button onclick="window.switchEssTab('checklist')" id="btn-ess-checklist" class="flex-1 bg-violet-600 text-white py-2 rounded-lg text-sm font-bold shadow-md transition-all">Checklist</button>
+            <button onclick="window.switchEssTab('goodies')" id="btn-ess-goodies" class="flex-1 bg-slate-800 text-slate-300 border border-slate-700 py-2 rounded-lg text-sm font-bold transition-all">Recommended Items</button>
+        </div></div>
+        <div class="p-4 flex-1 overflow-y-auto bg-slate-900 text-white no-scrollbar">
+            <div id="ess-checklist" class="space-y-3 pb-8"></div>
+            <div id="ess-goodies" class="hidden space-y-6 pb-8"></div>
+        </div>
+    </div>
+
+    <!-- About Us Modal -->
+    <div id="aboutModal" class="fixed inset-0 bg-slate-950 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto shadow-2xl">
+        <div class="bg-slate-800 text-white pt-10 pb-6 px-5 flex justify-between items-center"><h2 class="font-bold text-lg">About Us</h2><button onclick="window.closeModal('aboutModal')"><i class="ph ph-x text-2xl"></i></button></div>
+        <div class="p-5 flex-1 overflow-y-auto bg-slate-900 text-slate-200 space-y-6 text-sm">
+            <div class="bg-slate-800 p-5 rounded-2xl border border-white/10"><h3 class="font-bold mb-2 flex items-center gap-2 text-blue-400"><i class="ph-fill ph-quotes"></i> Our Mission</h3><p class="leading-relaxed text-gray-300">We accompany travelers from the first second of finding inspiration to the final moment of heading home. We hope to help users write their own unique stories.</p></div>
+            <div class="bg-slate-800 p-5 rounded-2xl border border-white/10"><h3 class="font-bold mb-3 flex items-center gap-2 text-amber-400"><i class="ph-fill ph-briefcase"></i> Partnerships</h3><ul class="space-y-3 text-gray-300"><li>📍 Destination Marketing & Branding</li><li>🎟️ Travel Product API Integration</li><li>⛺ Local Business Sponsorships</li></ul></div>
+            <div class="bg-blue-900/30 p-5 rounded-2xl border border-blue-800/50"><h3 class="font-bold mb-2 flex items-center gap-2 text-white"><i class="ph-fill ph-envelope-simple text-blue-400"></i> Contact Us</h3><p class="text-blue-400 font-bold break-all">imimdesignstudio@yahoo.com</p></div>
+        </div>
+    </div>
+
+    <!-- Follow Us Modal -->
+    <div id="fanModal" class="fixed inset-0 bg-slate-950 z-[80] hidden opacity-0 transition-opacity duration-300 flex flex-col max-w-[414px] mx-auto shadow-2xl">
+        <div class="bg-gradient-to-br from-red-500 to-rose-600 text-white pt-10 pb-6 px-5 flex justify-between items-center shadow-md z-10"><h2 class="font-bold text-lg">Follow Us</h2><button onclick="window.closeModal('fanModal')"><i class="ph ph-x text-2xl"></i></button></div>
+        <div class="p-5 flex-1 overflow-y-auto bg-slate-900 text-white flex flex-col items-center gap-6 no-scrollbar">
+            <img src="https://i.imgur.com/C8pWBp8.jpg" alt="Fan Page" class="w-full rounded-2xl shadow-lg border border-white/10 object-cover">
+            <div class="w-full space-y-3">
+                <a href="https://www.instagram.com/imim.designstudio" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform"><i class="ph-fill ph-instagram-logo text-xl"></i> Follow on Instagram</a>
+                <a href="https://www.threads.com/@imim.designstudio" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-zinc-800 text-white py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform border border-zinc-700"><i class="ph-fill ph-threads-logo text-xl"></i> Follow on Threads</a>
+                <a href="https://lin.ee/9VnWCAj" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 bg-[#00B900] text-white py-3.5 rounded-xl font-bold shadow-lg active:scale-95 transition-transform"><i class="ph-fill ph-chat-circle text-xl"></i> Add Official LINE</a>
+            </div>
+            <p class="text-xs text-gray-400 mt-2 text-center leading-relaxed">Follow us for first-hand Bangkok travel tips,<br>hidden food gems, and limited-time offers!</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Core JavaScript Logic -->
+<script>
+// --- Globals & Toggles ---
+window.currentAttrCatIdx = -1;
+
+window.openModal = function(id) {
+    const el = document.getElementById(id);
+    if (el) { 
+        el.classList.remove('hidden'); 
+        setTimeout(() => el.classList.remove('opacity-0'), 10); 
+    }
+};
+
+window.closeModal = function(id) {
+    const el = document.getElementById(id);
+    if (el) { 
+        el.classList.add('opacity-0'); 
+        setTimeout(() => el.classList.add('hidden'), 300); 
+    }
+};
+
+// --- Tab Switching Logic ---
+window.switchAirportTab = function(tab) {
+    const bkk = document.getElementById('airport-bkk');
+    const dmk = document.getElementById('airport-dmk');
+    const bbkk = document.getElementById('btn-airport-bkk');
+    const bdmk = document.getElementById('btn-airport-dmk');
+    
+    if (tab === 'bkk') {
+        bbkk.className = "flex-1 bg-cyan-600 text-white py-2 px-3 rounded-lg text-sm font-bold shadow-md transition-all whitespace-nowrap";
+        bdmk.className = "flex-1 bg-slate-800 text-slate-300 border border-slate-700 py-2 px-3 rounded-lg text-sm font-bold transition-all whitespace-nowrap";
+        bkk.classList.remove('hidden'); 
+        dmk.classList.add('hidden');
+    } else {
+        bdmk.className = "flex-1 bg-cyan-600 text-white py-2 px-3 rounded-lg text-sm font-bold shadow-md transition-all whitespace-nowrap";
+        bbkk.className = "flex-1 bg-slate-800 text-slate-300 border border-slate-700 py-2 px-3 rounded-lg text-sm font-bold transition-all whitespace-nowrap";
+        dmk.classList.remove('hidden'); 
+        bkk.classList.add('hidden');
+    }
+};
+
+// --- Transit Data ---
+const mrtLinesDataLocal = [
+    { line: "Airport Rail Link (ARL)", items: [
+        "A1 Suvarnabhumi Airport",
+        "A2 Lat Krabang",
+        "A3 Ban Thap Chang",
+        "A4 Hua Mak - Transfer to Yellow Line",
+        "A5 Ramkhamhaeng",
+        "A6 Makkasan - Transfer to MRT Blue Line",
+        "A7 Ratchaprarop - Near Pratunam Market",
+        "A8 Phaya Thai - Transfer to BTS Green Line"
+    ] },
+    { line: "BTS Silom Line", items: [
+        "W1 National Stadium - MBK Center",
+        "CEN Siam - Transfer to Sukhumvit Line, Siam Paragon",
+        "S1 Ratchadamri",
+        "S2 Sala Daeng - Transfer to MRT Blue Line",
+        "S3 Chong Nonsi - Mahanakhon SkyWalk",
+        "S4 Saint Louis",
+        "S5 Surasak - Blue Elephant Restaurant",
+        "S6 Saphan Taksin - Sathon Pier, River boats",
+        "S7 Krung Thon Buri - Transfer to Gold Line",
+        "S8 Wongwian Yai",
+        "S9 Pho Nimit",
+        "S10 Talat Phlu - Traditional Market",
+        "S11 Wutthakat",
+        "S12 Bang Wa - Transfer to MRT Blue Line"
+    ] },
+    { line: "BTS Sukhumvit Line", items: [
+        "N8 Mo Chit - Transfer to MRT Blue Line, Chatuchak",
+        "N7 Saphan Khwai",
+        "N5 Ari - Indie Cafe Hub",
+        "N4 Sanam Pao",
+        "N3 Victory Monument",
+        "N2 Phaya Thai - Transfer to ARL",
+        "N1 Ratchathewi",
+        "CEN Siam - Transfer to Silom Line",
+        "E1 Chit Lom - Erawan Shrine, CentralWorld",
+        "E2 Phloen Chit",
+        "E3 Nana",
+        "E4 Asok - Transfer to MRT Blue Line, Terminal 21",
+        "E5 Phrom Phong - Em District",
+        "E6 Thong Lo - Trendy Nightlife",
+        "E7 Ekkamai - Eastern Bus Terminal",
+        "E8 Phra Khanong",
+        "E9 On Nut - Budget Hotels & Massages",
+        "E10 Bang Chak",
+        "E13 Bang Na - BITEC",
+        "E17 Chang Erawan - Erawan Museum"
+    ] },
+    { line: "BTS Gold Line", items: [
+        "G1 Krung Thon Buri - Transfer to BTS Silom Line",
+        "G2 Charoen Nakhon - Direct to ICONSIAM",
+        "G3 Khlong San"
+    ] },
+    { line: "MRT Blue Line", items: [
+        "BL12 Kamphaeng Phet - Chatuchak Weekend Market",
+        "BL13 Chatuchak Park - Transfer to BTS Mo Chit",
+        "BL14 Phahon Yothin - Central Ladprao",
+        "BL18 Huai Khwang - Huai Khwang Night Market",
+        "BL19 Thailand Cultural Centre - The One Ratchada",
+        "BL20 Phra Ram 9 - Central Plaza Grand Rama 9",
+        "BL21 Phetchaburi - Transfer to ARL Makkasan",
+        "BL22 Sukhumvit - Transfer to BTS Asok, Terminal 21",
+        "BL23 Queen Sirikit National Convention Centre",
+        "BL24 Khlong Toei",
+        "BL25 Lumphini - Lumphini Park",
+        "BL26 Si Lom - Transfer to BTS Sala Daeng",
+        "BL27 Sam Yan - Chula University Area",
+        "BL28 Hua Lamphong - Old Railway Station",
+        "BL29 Wat Mangkon - Chinatown (Yaowarat)",
+        "BL30 Sam Yot - Old Town, Giant Swing",
+        "BL31 Sanam Chai - Grand Palace, Wat Pho",
+        "BL32 Itsaraphap - Near Wat Arun"
+    ] },
+    { line: "MRT Yellow Line", items: [
+        "YL01 Lat Phrao - Transfer to MRT Blue Line",
+        "YL03 Chok Chai 4 - Local Night Market",
+        "YL11 Hua Mak - Transfer to ARL",
+        "YL15 Suan Luang Rama IX - Train Night Market",
+        "YL23 Samrong - Transfer to BTS Sukhumvit Line"
+    ] }
+];
+
+const codeToNameLocal = {};
+mrtLinesDataLocal.forEach(lineGroup => {
+    lineGroup.items.forEach(item => {
+        const code = item.split(' ')[0];
+        codeToNameLocal[code] = item;
+    });
+});
+
+const buildMrtGraphLocal = () => {
+    const edges = [];
+    const addLine = (lineName, nodes) => {
+        for (let i = 0; i < nodes.length - 1; i++) {
+            edges.push({ u: nodes[i], v: nodes[i + 1], line: lineName, type: 'travel' });
+            edges.push({ u: nodes[i + 1], v: nodes[i], line: lineName, type: 'travel' });
+        }
+    };
+    
+    const ARL = ["A1","A2","A3","A4","A5","A6","A7","A8"];
+    const Silom = ["W1","CEN","S1","S2","S3","S4","S5","S6","S7","S8","S9","S10","S11","S12"];
+    const Sukhumvit = [];
+    for(let i=24; i>=1; i--) Sukhumvit.push('N'+i);
+    Sukhumvit.push('CEN');
+    for(let i=1; i<=23; i++) Sukhumvit.push('E'+i);
+    const Gold = ["G1","G2","G3"];
+    const Blue = []; for(let i=1; i<=38; i++) Blue.push('BL'+String(i).padStart(2, '0'));
+    const Yellow = []; for(let i=1; i<=23; i++) Yellow.push('YL'+String(i).padStart(2, '0'));
+    
+    addLine('Airport Rail Link (ARL)', ARL);
+    addLine('BTS Silom Line', Silom);
+    addLine('BTS Sukhumvit Line', Sukhumvit);
+    addLine('BTS Gold Line', Gold);
+    addLine('MRT Blue Line', Blue);
+    addLine('MRT Yellow Line', Yellow);
+    
+    const addTransfer = (u, v) => {
+        edges.push({ u, v, line: 'Walking Transfer', type: 'transfer' });
+        edges.push({ v, u, line: 'Walking Transfer', type: 'transfer' });
+    };
+    
+    addTransfer('A4', 'YL11');
+    addTransfer('A6', 'BL21');
+    addTransfer('A8', 'N2');
+    addTransfer('S2', 'BL26');
+    addTransfer('S7', 'G1');
+    addTransfer('S12', 'BL34');
+    addTransfer('N8', 'BL13');
+    addTransfer('E4', 'BL22');
+    addTransfer('YL01', 'BL15'); 
+    addTransfer('YL23', 'E15');
+    
+    const graph = {};
+    edges.forEach(e => {
+        if (!graph[e.u]) graph[e.u] = [];
+        graph[e.u].push({ node: e.v, line: e.line, type: e.type });
+    });
+    return graph;
+};
+
+const mrtGraphLocal = buildMrtGraphLocal();
+
+const boatLinesDataLocal = [
+    { line: "Orange Flag", items: ["N30 Nonthaburi","N15 Thewes","N13 Phra Arthit","N12 Phra Pin Klao","N10 Wang Lang","N9 Tha Chang","N8 Tha Tien","N5 Ratchawong","N4 Marine Dept","N3 Si Phraya","ICONSIAM","CEN Sathorn","S3 Wat Rajsingkorn"] },
+    { line: "Blue Flag (Tourist)", items: ["Phra Arthit (B)","Wang Lang (B)","Tha Maharaj (B)","Wat Arun (B)","Ratchawong (B)","ICONSIAM (B)","Sathorn (B)"] },
+    { line: "Khlong Saen Saep Canal", items: ["C1 Pratunam","C2 Chit Lom","C3 Nana Nua","C4 Asok","C5 Prasanmit","C6 Thong Lo","C7 Ekkamai"] }
+];
+
+const boatGraphLocal = {};
+const addBoatEdgeLocal = (u, v) => { 
+    if(!boatGraphLocal[u]) boatGraphLocal[u]=[]; 
+    if(!boatGraphLocal[v]) boatGraphLocal[v]=[]; 
+    boatGraphLocal[u].push(v); 
+    boatGraphLocal[v].push(u); 
+};
+boatLinesDataLocal.forEach(line => { 
+    for(let i=0; i<line.items.length-1; i++) {
+        addBoatEdgeLocal(line.items[i].split(' ')[0], line.items[i+1].split(' ')[0]); 
+    }
+});
+['N13','N10','N9','N8','N5','ICONSIAM','CEN'].forEach(s => {
+    let blueNode = s.includes('ICON') ? s + ' (B)' : s + ' (B)'.replace('N', '');
+    addBoatEdgeLocal(s, blueNode);
+});
+
+// --- Attractions Database ---
+const attractionsData = [
+    {
+        category: "💵 Currency_Exchange",
+        items: [
+            {
+                id: "ex1", name: "Superrich Thailand (Green)", desc: "Known for the best exchange rates. Passport required.",
+                hours: "09:00 - 18:00 (Closed Sundays)", transport: "1. BTS Chit Lom Exit 1 (10 min walk)<br>2. Pratunam Pier (5 min walk)",
+                address: "45 Rajdamri Rd, Lumphini, Bangkok", mapUrl: "https://www.google.com/maps/search/?api=1&query=Superrich+Thailand", img: "https://i.imgur.com/4FlI1DJ.jpg"
+            },
+            {
+                id: "ex2", name: "Superrich 1965 (Orange)", desc: "Many branches across BTS/MRT stations. Rates slightly lower than green.",
+                hours: "10:00 - 20:00 (Varies by branch)", transport: "1. BTS Chit Lom Exit 1 (10 min walk)<br>2. Pratunam Pier (5 min walk)",
+                address: "47/11-13 Rajdamri Rd, Pathum Wan", mapUrl: "https://www.google.com/maps/search/?api=1&query=Superrich+1965", img: "https://i.imgur.com/peLQtms.jpg"
+            },
+            {
+                id: "ex3", name: "Vasu Exchange", desc: "Well-established near Nana Station. Excellent TWD/USD rates.",
+                hours: "09:00 - 18:00 (Closed Sundays)", transport: "1. BTS Nana Exit 1 (stairs)<br>2. BTS Asok Exit 3 (8 min walk)",
+                address: "Sukhumvit Soi 7/1, Khlong Toei", mapUrl: "https://www.google.com/maps/search/?api=1&query=Vasu+Exchange", img: "https://i.imgur.com/9BUwkMt.jpg"
+            }
+        ]
+    },
+    {
+        category: "🛒 Supermarkets",
+        items: [
+            {
+                id: "sm1", name: "Big C Supercenter", desc: "Tourist favorite for bulk buying. Get Pocky, squid snacks, Thai tea.",
+                hours: "09:00 - 02:00", transport: "1. BTS Chit Lom Exit 1/9 (10 min walk)<br>2. Walk across from CentralWorld",
+                address: "97/11 Ratchadamri Rd, Lumphini", mapUrl: "https://www.google.com/maps/search/?api=1&query=Big+C+Rajdamri", img: "https://i.imgur.com/vI0sBrH.jpg"
+            },
+            {
+                id: "sm2", name: "Lotus's (On Nut)", desc: "Local hypermarket. Great for Blue Elephant curry paste and Snake Brand powder.",
+                hours: "06:00 - 24:00", transport: "1. Connected to BTS On Nut Exit 2",
+                address: "1710 Sukhumvit Rd, Phra Khanong", mapUrl: "https://www.google.com/maps/search/?api=1&query=Lotuss+On+Nut", img: "https://i.imgur.com/P94GZ1F.jpg"
+            },
+            {
+                id: "sm3", name: "Gourmet Market", desc: "Premium supermarket. High-quality dried fruits and THANN products.",
+                hours: "10:00 - 22:00", transport: "1. Siam Paragon G Floor<br>2. Terminal 21 branch",
+                address: "Siam Paragon G Floor, Pathum Wan", mapUrl: "https://www.google.com/maps/search/?api=1&query=Gourmet+Market+Siam", img: "https://i.imgur.com/wZjFEBa.jpg"
+            },
+            {
+                id: "sm4", name: "7-Eleven", desc: "Late-night savior. Try hot-pressed sandwiches and Meiji milk.",
+                hours: "24 Hours", transport: "Everywhere in Bangkok",
+                address: "Bangkok Citywide", mapUrl: "https://www.google.com/maps/search/?api=1&query=7-Eleven", img: "https://i.imgur.com/mriDxf4.jpg"
+            }
+        ]
+    },
+    {
+        category: "🛍️ Shopping_Malls",
+        items: [
+            {
+                id: "m1", name: "One Bangkok", desc: "Brand new mega-landmark opened in late 2024!", hours: "10:00 - 22:00", transport: "1. MRT Lumphini Exit 3<br>2. Grab/Taxi to main entrance",
+                address: "110 Wireless Rd, Lumphini", mapUrl: "https://www.google.com/maps/search/?api=1&query=One+Bangkok", img: "https://i.imgur.com/EHO5NB3.jpg",
+                tabs: [
+                    { id: 'm1_1', name: 'Brands', items: [{ name: "ZARA", desc: "Fast fashion & outerwear" }, { name: "Sephora", desc: "International cosmetics" }, { name: "Jaspal", desc: "Thai premium fashion" }, { name: "Gentlewoman", desc: "Popular canvas bags" }, { name: "Greyhound Original", desc: "Avant-garde Thai fashion" }, { name: "Jim Thompson", desc: "Premium Thai silk" }, { name: "Panpuri", desc: "Luxury essential oils" }] },
+                    { id: 'm1_2', name: 'Food', items: [{ name: "Gordon Ramsay", desc: "Beef Wellington" }, { name: "% Arabica", desc: "Minimalist coffee" }, { name: "Ojo", desc: "Luxury sky dining" }, { name: "Nara Thai", desc: "Classic Thai cuisine" }, { name: "Somboon Seafood", desc: "Curry crab" }, { name: "Thong Smith", desc: "Premium Wagyu boat noodles" }, { name: "Copper Buffet", desc: "Premium seafood buffet" }] },
+                    { id: 'm1_3', name: 'Souvenirs', items: [{ name: "Royce", desc: "Japanese chocolate" }, { name: "TWG Tea", desc: "Artisan tea & macarons" }, { name: "Royal Project", desc: "Honey & milk tablets" }, { name: "ChaTraMue", desc: "Thai tea mix" }, { name: "Karmakamet", desc: "Retro fragrance sachets" }, { name: "Tao Kae Noi", desc: "Crispy seaweed" }, { name: "Madame Heng", desc: "Herbal soap" }] }
+                ]
+            },
+            {
+                id: "m2", name: "Emsphere", desc: "Futuristic mall with IKEA and late-night food court.", hours: "10:00 - 22:00", transport: "1. BTS Phrom Phong Exit 6 via skywalk",
+                address: "628 Sukhumvit Rd, Khlong Tan", mapUrl: "https://www.google.com/maps/search/?api=1&query=Emsphere", img: "https://i.imgur.com/FaFwBav.jpg",
+                tabs: [
+                    { id: 'm2_1', name: 'Brands', items: [{ name: "IKEA", desc: "Nordic home goods" }, { name: "Uniqlo", desc: "Functional apparel" }, { name: "Pipatchara", desc: "Macrame eco-bags" }, { name: "Daddy", desc: "Y2K retro stickers" }, { name: "Frank Garcon", desc: "Unisex streetwear" }, { name: "Rally Movement", desc: "Athleisure" }, { name: "Boyy", desc: "Iconic buckle bags" }] },
+                    { id: 'm2_2', name: 'Food', items: [{ name: "Shake Shack", desc: "Cheeseburgers & fries" }, { name: "Bianca", desc: "Italian pizza" }, { name: "ZAO", desc: "Isan style hotpot" }, { name: "Thong Smith", desc: "Wagyu boat noodles" }, { name: "Oh My Godmother", desc: "Fusion brunch" }, { name: "Rung Reung", desc: "Michelin pork noodles" }, { name: "Pang Cha", desc: "Giant Thai tea shaved ice" }] },
+                    { id: 'm2_3', name: 'Souvenirs', items: [{ name: "LUSH", desc: "Bath bombs" }, { name: "Muji", desc: "Minimalist snacks" }, { name: "Copenn.", desc: "Industrial style fragrance" }, { name: "Thai Dried Fruits", desc: "Freeze-dried durian" }, { name: "Elephant Goods", desc: "Woven coin purses" }, { name: "Kad Kokoa", desc: "Chiang Mai craft chocolate" }, { name: "Erb", desc: "Herbal SPA products" }] }
+                ]
+            },
+            {
+                id: "m3", name: "ICONSIAM", desc: "Luxury riverside mall featuring an indoor floating market.", hours: "10:00 - 22:00", transport: "1. BTS Krung Thon Buri transfer to Gold Line G2<br>2. Free shuttle boat from BTS Saphan Taksin",
+                address: "299 Charoen Nakhon Rd, Khlong San", mapUrl: "https://www.google.com/maps/search/?api=1&query=ICONSIAM", img: "https://i.imgur.com/3rE2Ote.jpg",
+                tabs: [
+                    { id: 'm3_1', name: 'Brands', items: [{ name: "H&M", desc: "Fast fashion" }, { name: "COS", desc: "Quilted bags" }, { name: "NaRaYa", desc: "Classic bow bags" }, { name: "BKK Original", desc: "Chain mini bags" }, { name: "Bath & Bloom", desc: "Jasmine massage oil" }, { name: "SookSiam", desc: "Woven hats" }, { name: "Jelly Bunny", desc: "Scented jelly shoes" }] },
+                    { id: 'm3_2', name: 'Food', items: [{ name: "Jumbo Seafood", desc: "Singapore chili crab" }, { name: "Tim Ho Wan", desc: "BBQ pork buns" }, { name: "Thip Samai", desc: "Best Pad Thai" }, { name: "Kub Kao Kub Pla", desc: "Refined green curry" }, { name: "Lukkaithong", desc: "Michelin Thai tea ice" }, { name: "After You", desc: "Mango sticky rice toast" }, { name: "Savoey", desc: "Curry crab" }] },
+                    { id: 'm3_3', name: 'Souvenirs', items: [{ name: "Garrett Popcorn", desc: "Macadamia caramel" }, { name: "TWG Tea", desc: "Luxury tea boxes" }, { name: "Jim Thompson", desc: "Silk ties & scarves" }, { name: "SookSiam Market", desc: "Handmade coconut candy" }, { name: "Thann", desc: "Aromatic wood lotion" }, { name: "Bird's Nest", desc: "Premium tonic" }, { name: "Ceramics", desc: "Elephant teacup sets" }] }
+                ]
+            },
+            {
+                id: "m4", name: "Terminal 21 Asok", desc: "Airport-themed mall with the cheapest food court (Pier 21).", hours: "10:00 - 22:00", transport: "1. BTS Asok Exit 1/3<br>2. MRT Sukhumvit Exit 3",
+                address: "88 Sukhumvit Soi 19, Watthana", mapUrl: "https://www.google.com/maps/search/?api=1&query=Terminal+21+Asok", img: "https://i.imgur.com/nL4HDR0.jpg",
+                tabs: [
+                    { id: 'm4_1', name: 'Brands', items: [{ name: "Victoria's Secret", desc: "Perfumes" }, { name: "M.A.C", desc: "Professional makeup" }, { name: "Merimies", desc: "Macaron bags" }, { name: "Sabina", desc: "Wireless bras" }, { name: "Beauty Buffet", desc: "Q10 Milk wash" }, { name: "Mistine", desc: "Waterproof eyeliner" }, { name: "Boutiques", desc: "Tokyo floor dresses" }] },
+                    { id: 'm4_2', name: 'Food', items: [{ name: "Mos Burger", desc: "Rice burgers" }, { name: "Yoshinoya", desc: "Beef bowls" }, { name: "Pier 21", desc: "Best value pork leg rice" }, { name: "Have a Zeed", desc: "Tom Yum Goong" }, { name: "MK Restaurants", desc: "Thai suki & roast duck" }, { name: "Baan Ying", desc: "Custom omelet rice" }, { name: "ChaTraMue", desc: "Iced Thai tea" }] },
+                    { id: 'm4_3', name: 'Souvenirs', items: [{ name: "The Body Shop", desc: "Tea tree skincare" }, { name: "Daiso", desc: "Travel accessories" }, { name: "Blue Elephant", desc: "Green curry paste" }, { name: "Madame Heng", desc: "Herbal soap" }, { name: "BKK T-shirts", desc: "Istanbul floor prints" }, { name: "POY-SIAN", desc: "Mint inhalers" }, { name: "Taro", desc: "Spicy squid strips" }] }
+                ]
+            },
+            {
+                id: "m5", name: "Central Ladprao", desc: "Local's favorite long-standing shopping mall.", hours: "10:00 - 22:00", transport: "1. BTS Ha Yaek Lat Phrao Exit 1/3<br>2. MRT Phahon Yothin Exit 3",
+                address: "1693 Phahonyothin Rd, Chatuchak", mapUrl: "https://www.google.com/maps/search/?api=1&query=Central+Ladprao", img: "https://i.imgur.com/pstKqtR.jpg",
+                tabs: [
+                    { id: 'm5_1', name: 'Brands', items: [{ name: "Mango", desc: "Urban womenswear" }, { name: "H&M", desc: "Casual wear" }, { name: "CPS Chaps", desc: "Rock & roll style" }, { name: "Lyn", desc: "Bags and heels" }, { name: "Pomelo", desc: "Fast fashion" }, { name: "CC Double O", desc: "American casual" }, { name: "AIIZ", desc: "Affordable basics" }] },
+                    { id: 'm5_2', name: 'Food', items: [{ name: "Sushiro", desc: "Conveyor belt sushi" }, { name: "Sizzler", desc: "Salad bar & steak" }, { name: "After You", desc: "Thai tea Kakigori" }, { name: "Somtam Nua", desc: "Fried chicken & papaya salad" }, { name: "Hua Seng Hong", desc: "Shark fin & roast duck" }, { name: "Greyhound Cafe", desc: "Squid ink pasta" }, { name: "Bar-B-Q Plaza", desc: "Thai BBQ" }] },
+                    { id: 'm5_3', name: 'Souvenirs', items: [{ name: "Boots", desc: "Vitamin C skincare" }, { name: "Kiehl's", desc: "Calendula toner" }, { name: "Royal Farm", desc: "100% strawberry juice" }, { name: "Mama", desc: "Tom Yum noodles" }, { name: "Thai Candy", desc: "Coconut candy" }, { name: "Elephant Pants", desc: "Comfortable resort wear" }, { name: "Dentiste", desc: "Herb toothpaste" }] }
+                ]
+            },
+            {
+                id: "m6", name: "Mega Bangna", desc: "Southeast Asia's largest low-rise mall.", hours: "10:00 - 22:00", transport: "1. Free shuttle from BTS Udom Suk Exit 5",
+                address: "39 Moo 6 Bangna-Trad Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Mega+Bangna", img: "https://i.imgur.com/JUBI4xm.jpg",
+                tabs: [
+                    { id: 'm6_1', name: 'Brands', items: [{ name: "IKEA", desc: "Nordic furniture" }, { name: "Cotton On", desc: "Casual wear" }, { name: "Gentlewoman", desc: "Canvas bags" }, { name: "Eveandboy", desc: "Cosmetics" }, { name: "Matchbox", desc: "Designer multi-brand" }, { name: "Jelly Bunny", desc: "Jelly shoes" }, { name: "Jaspal", desc: "Premium fashion" }] },
+                    { id: 'm6_2', name: 'Food', items: [{ name: "Paul", desc: "French bakery" }, { name: "Maguro", desc: "Premium sushi" }, { name: "SSamthing", desc: "Korean BBQ" }, { name: "Fam Time", desc: "Handmade pasta" }, { name: "Yuzu Suki", desc: "Yuzu broth hotpot" }, { name: "Savoey", desc: "Seafood & curry crab" }, { name: "Thong Smith", desc: "Wagyu boat noodles" }] },
+                    { id: 'm6_3', name: 'Souvenirs', items: [{ name: "Miniso", desc: "Lifestyle goods" }, { name: "Toys R Us", desc: "Toys & models" }, { name: "IKEA Special", desc: "Elephant shopping bags" }, { name: "Tao Kae Noi", desc: "Seaweed packs" }, { name: "Supermarket", desc: "Thai fish sauce" }, { name: "Herbal Compress", desc: "Massage balls" }, { name: "Wood Carvings", desc: "Wooden tableware" }] }
+                ]
+            },
+            {
+                id: "m7", name: "Samyan Mitrtown", desc: "24-hour zone, popular among Chula university students.", hours: "24 hours (Some areas)", transport: "1. MRT Sam Yan Exit 2<br>2. 5 min walk to Banthat Thong",
+                address: "944 Rama IV Rd, Wang Mai", mapUrl: "https://www.google.com/maps/search/?api=1&query=Samyan+Mitrtown", img: "https://i.imgur.com/iHkMAUi.jpg",
+                tabs: [
+                    { id: 'm7_1', name: 'Brands', items: [{ name: "Muji", desc: "Largest concept store" }, { name: "Nyx", desc: "Lipsticks" }, { name: "Apricot", desc: "Student fashion" }, { name: "Medium and More", desc: "Designer stationery" }, { name: "Frank Garcon", desc: "Unisex streetwear" }, { name: "Ecotopia", desc: "Eco-friendly goods" }, { name: "SOS", desc: "Women's fashion" }] },
+                    { id: 'm7_2', name: 'Food', items: [{ name: "Texas Chicken", desc: "Fried chicken" }, { name: "Swensen's", desc: "Sundaes" }, { name: "Shabu Shi", desc: "Buffet hotpot" }, { name: "Kamu", desc: "Dinosaur bubble tea" }, { name: "Kuang Heng", desc: "Chicken rice" }, { name: "Jones' Salad", desc: "Healthy salads" }, { name: "Yuzu House", desc: "Refreshing desserts" }] },
+                    { id: 'm7_3', name: 'Souvenirs', items: [{ name: "Daiso", desc: "Japanese goods" }, { name: "Don Don Donki", desc: "Japanese snacks" }, { name: "Chula Coop", desc: "University merch" }, { name: "Thai Stickers", desc: "Washi tapes" }, { name: "Big C Foodplace", desc: "Retro snacks" }, { name: "Eco Bags", desc: "Handmade cup sleeves" }, { name: "Durian Chips", desc: "Freeze-dried durian" }] }
+                ]
+            },
+            {
+                id: "m8", name: "Gaysorn Village", desc: "Ultra-luxury and niche boutiques.", hours: "10:00 - 20:00", transport: "1. BTS Chit Lom Exit 6 skywalk<br>2. 1 min to Erawan Shrine",
+                address: "999 Phloen Chit Rd, Lumphini", mapUrl: "https://www.google.com/maps/search/?api=1&query=Gaysorn+Village", img: "https://i.imgur.com/2WNe1jl.jpg",
+                tabs: [
+                    { id: 'm8_1', name: 'Brands', items: [{ name: "Max Mara", desc: "Italian cashmere" }, { name: "Hugo Boss", desc: "Menswear" }, { name: "Panpuri", desc: "Luxury SPA care" }, { name: "Thann", desc: "Royal essential oils" }, { name: "Boyy", desc: "Designer bags" }, { name: "Club 21", desc: "Selected fashion" }, { name: "Kloset", desc: "Retro womenswear" }] },
+                    { id: 'm8_2', name: 'Food', items: [{ name: "Burger & Lobster", desc: "Lobster rolls" }, { name: "Mandarin Oriental Shop", desc: "Macarons" }, { name: "Paste", desc: "Michelin Thai cuisine" }, { name: "Provence", desc: "Premium boat noodles" }, { name: "1823 Tea Lounge", desc: "High tea" }, { name: "Boyy Cafe", desc: "Designer coffee" }, { name: "Nara Thai Cuisine", desc: "Classic Thai" }] },
+                    { id: 'm8_3', name: 'Souvenirs', items: [{ name: "Jo Malone", desc: "Perfumes" }, { name: "Diptyque", desc: "Candles" }, { name: "Panpuri Gift Sets", desc: "Hand creams" }, { name: "Benjarong", desc: "Royal porcelain" }, { name: "Premium Bird's Nest", desc: "Health tonic" }, { name: "Karmakamet", desc: "Room diffusers" }, { name: "Boyy Wallets", desc: "Leather goods" }] }
+                ]
+            },
+            {
+                id: "m9", name: "Siam Paragon", desc: "Luxury landmark with a huge aquarium in the basement.", hours: "10:00 - 22:00", transport: "1. BTS Siam Exit 3/5",
+                address: "991 Rama I Rd, Pathum Wan", mapUrl: "https://www.google.com/maps/search/?api=1&query=Siam+Paragon", img: "https://i.imgur.com/BtSaavW.jpg",
+                tabs: [
+                    { id: 'm9_1', name: 'Brands', items: [{ name: "Chanel", desc: "Luxury bags & makeup" }, { name: "Gucci", desc: "Bags & belts" }, { name: "Greyhound", desc: "Avant-garde fashion" }, { name: "Asava", desc: "Elegant womenswear" }, { name: "Sretsis", desc: "Fairy-tale dresses" }, { name: "Senada", desc: "Romantic apparel" }, { name: "Vatanika", desc: "Luxury evening wear" }] },
+                    { id: 'm9_2', name: 'Food', items: [{ name: "TWG Tea", desc: "Premium tea & pastries" }, { name: "Haidilao", desc: "Hotpot (Tom Yum)" }, { name: "Chilli Thai", desc: "Isan cuisine" }, { name: "Taling Pling", desc: "Traditional Thai" }, { name: "Another Hound", desc: "Fusion pasta" }, { name: "BRIX Dessert", desc: "Boba souffle" }, { name: "Karun", desc: "Gold-flake Thai tea" }] },
+                    { id: 'm9_3', name: 'Souvenirs', items: [{ name: "Royce", desc: "Nama chocolate" }, { name: "Garrett", desc: "Macadamia popcorn" }, { name: "Gourmet Market", desc: "Premium dried mango" }, { name: "Thann", desc: "Aromatic wood set" }, { name: "Jim Thompson", desc: "Silk products" }, { name: "ChaTraMue", desc: "Thai tea tins" }, { name: "Blue Elephant", desc: "Curry paste" }] }
+                ]
+            },
+            {
+                id: "m10", name: "CentralWorld", desc: "One of the largest malls in Thailand.", hours: "10:00 - 22:00", transport: "1. BTS Chit Lom Exit 1/9 skywalk<br>2. BTS Siam Exit 6",
+                address: "999/9 Rama I Rd, Pathum Wan", mapUrl: "https://www.google.com/maps/search/?api=1&query=CentralWorld", img: "https://i.imgur.com/udDB48a.jpg",
+                tabs: [
+                    { id: 'm10_1', name: 'Brands', items: [{ name: "Apple", desc: "Flagship store" }, { name: "Sephora", desc: "Cosmetics" }, { name: "CPS Chaps", desc: "Rock style jeans" }, { name: "Lyn Around", desc: "Colorful womenswear" }, { name: "Quinn", desc: "Urban suits" }, { name: "LYN", desc: "Designer bags" }, { name: "Dapper", desc: "Leather shoes" }] },
+                    { id: 'm10_2', name: 'Food', items: [{ name: "Shake Shack", desc: "Burgers" }, { name: "Sushiro", desc: "Sushi" }, { name: "Thong Smith", desc: "Wagyu boat noodles" }, { name: "Ros'niyom", desc: "Street food noodles" }, { name: "Laem Charoen", desc: "Fried sea bass" }, { name: "Hua Seng Hong", desc: "Shark fin" }, { name: "After You", desc: "Shaved ice toast" }] },
+                    { id: 'm10_3', name: 'Souvenirs', items: [{ name: "Kinokuniya", desc: "Japanese stationery" }, { name: "Zara Home", desc: "Home fragrances" }, { name: "Karmakamet", desc: "Essential oils" }, { name: "NaRaYa", desc: "Bow bags" }, { name: "Royal Project", desc: "Honey & milk tablets" }, { name: "Dried Fruits", desc: "Coconut chips" }, { name: "Madame Heng", desc: "Herbal soap" }] }
+                ]
+            }
+        ]
+    },
+    {
+        category: "⛩️ Temples_&_Heritage",
+        items: [
+            {
+                id: "t1", name: "Grand Palace & Wat Phra Kaew", desc: "The most iconic royal and religious architecture in Thailand.",
+                hours: "08:30 - 15:30", transport: "1. Orange Flag Boat to Tha Chang<br>2. MRT Sanam Chai (15 min walk)",
+                address: "Na Phra Lan Rd, Phra Nakhon", mapUrl: "https://www.google.com/maps/search/?api=1&query=Grand+Palace", img: "https://i.imgur.com/ViaW4r8.jpg"
+            },
+            {
+                id: "t2", name: "Wat Arun", desc: "Temple of Dawn, stunning white ceramic pagoda.",
+                hours: "08:00 - 18:00", transport: "1. Orange Flag to Tha Tien, cross-river ferry<br>2. MRT Itsaraphap (10 min walk)",
+                address: "158 Thanon Wang Doem", mapUrl: "https://www.google.com/maps/search/?api=1&query=Wat+Arun", img: "https://i.imgur.com/uLrQdd1.jpg"
+            },
+            {
+                id: "t3", name: "Wat Paknam", desc: "Famous for the 69m golden Buddha and green glass stupa.",
+                hours: "08:00 - 18:00", transport: "1. MRT Bang Phai (15 min walk)<br>2. Canal longtail boat",
+                address: "300 Ratchamongkhon Prasat", mapUrl: "https://www.google.com/maps/search/?api=1&query=Wat+Paknam", img: "https://i.imgur.com/0H9vXup.jpg"
+            },
+            {
+                id: "t4", name: "Erawan Shrine", desc: "Extremely popular Hindu shrine in the city center.",
+                hours: "06:00 - 22:00", transport: "1. BTS Chit Lom (3 min walk)<br>2. BTS Siam (5 min walk)",
+                address: "494 Ratchadamri Rd, Lumphini", mapUrl: "https://www.google.com/maps/search/?api=1&query=Erawan+Shrine", img: "https://i.imgur.com/ueuodhd.jpg"
+            }
+        ]
+    },
+    {
+        category: "🌙 Popular_Markets",
+        items: [
+            {
+                id: "mk1", subcat: "Tourist Markets", name: "Chatuchak Weekend Market", desc: "World's largest weekend market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Coconut ice cream, Seafood paella",
+                hours: "Weekends 09:00 - 18:00", transport: "BTS Mo Chit / MRT Chatuchak Park",
+                address: "Kamphaeng Phet 2 Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Chatuchak", img: "https://i.imgur.com/qSCqF9r.jpg"
+            },
+            {
+                id: "mk2", subcat: "Tourist Markets", name: "Song Wat Road", desc: "Hipster historic street.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Charcoal toast, Thai tea, Pork buns",
+                hours: "10:00 - 20:00", transport: "MRT Wat Mangkon (10 min walk)",
+                address: "Song Wat Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Song+Wat", img: "https://i.imgur.com/0O6XPV8.jpg"
+            },
+            {
+                id: "mk3", subcat: "Tourist Markets", name: "Chinatown (Yaowarat)", desc: "Late-night street food paradise.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Roll noodles, T&K Seafood",
+                hours: "18:00 - 24:00", transport: "MRT Wat Mangkon (3 min walk)",
+                address: "Yaowarat Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Yaowarat", img: "https://i.imgur.com/HUceCjc.jpg"
+            },
+            {
+                id: "mk5", subcat: "Tourist Markets", name: "Pratunam Market", desc: "Wholesale fashion hub.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Chicken rice, Pork satay",
+                hours: "05:00 - 15:00", transport: "BTS Chit Lom (15 min walk)",
+                address: "Phetchaburi Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Pratunam", img: "https://i.imgur.com/R2wm82T.jpg"
+            },
+            {
+                id: "mk7", subcat: "Tourist Markets", name: "Banthat Thong", desc: "Chula university food street.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Crab omelet, Soy milk ice",
+                hours: "17:00 - 24:00", transport: "MRT Sam Yan (10 min walk)",
+                address: "Banthat Thong Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Banthat+Thong", img: "https://i.imgur.com/UkTlije.jpg"
+            },
+            {
+                id: "mk8", subcat: "Traditional", name: "Wang Lang Market", desc: "Riverside local market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Wang Lang bakery, Fried pork",
+                hours: "09:00 - 17:00", transport: "Boat to Wang Lang (N10)",
+                address: "Wang Lang Rd, Siri Rat", mapUrl: "https://www.google.com/maps/search/?api=1&query=Wang+Lang", img: "https://i.imgur.com/7mvytLt.jpg"
+            },
+            {
+                id: "mk9", subcat: "Traditional", name: "Sampeng Market", desc: "Chinatown wholesale alley.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Old-school Thai tea, BBQ skewers",
+                hours: "08:00 - 17:00", transport: "MRT Wat Mangkon (10 min walk)",
+                address: "Soi Wanit 1, Samphanthawong", mapUrl: "https://www.google.com/maps/search/?api=1&query=Sampeng", img: "https://i.imgur.com/g8u4ZLy.jpg"
+            },
+            {
+                id: "mk10", subcat: "Traditional", name: "Nang Loeng Market", desc: "Century-old wooden market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Braised pork leg, Traditional cakes",
+                hours: "08:00 - 15:00", transport: "MRT Sam Yot (10 min Tuk-tuk)",
+                address: "Nakhon Sawan Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Nang+Loeng", img: "https://i.imgur.com/g8u4ZLy.jpg"
+            },
+            {
+                id: "mk11", subcat: "Traditional", name: "Khlong Lat Mayom", desc: "Local floating market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Salt-crusted fish, Pad Thai",
+                hours: "Weekends 08:00 - 17:00", transport: "BTS Bang Wa (15 min Taxi)",
+                address: "Bang Ramat Rd, Taling Chan", mapUrl: "https://www.google.com/maps/search/?api=1&query=Khlong+Lat+Mayom", img: "https://i.imgur.com/g8u4ZLy.jpg"
+            },
+            {
+                id: "mk12", subcat: "Traditional", name: "Lalai Sap Market", desc: "Silom office workers' kitchen.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Fried chicken rice, Rose milk tea",
+                hours: "Weekdays 07:00 - 14:00", transport: "BTS Chong Nonsi (5 min walk)",
+                address: "Silom 5 Alley, Bang Rak", mapUrl: "https://www.google.com/maps/search/?api=1&query=Lalai+Sap", img: "https://i.imgur.com/g8u4ZLy.jpg"
+            },
+            {
+                id: "mk13", subcat: "Traditional", name: "Trok Mor Morning Market", desc: "Old town morning market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Charcoal pork skewers, Black coffee",
+                hours: "05:00 - 11:00", transport: "MRT Sam Yot (10 min walk)",
+                address: "Soi Thesa, Ratchabophit Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Trok+Mor", img: "https://i.imgur.com/g8u4ZLy.jpg"
+            },
+            {
+                id: "mk14", subcat: "Traditional", name: "Pak Khlong Talat", desc: "24-hour flower market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Edible flower salad, Banana fritters",
+                hours: "24 Hours", transport: "MRT Sanam Chai (5 min walk)",
+                address: "Chakkraphet Rd, Phra Nakhon", mapUrl: "https://www.google.com/maps/search/?api=1&query=Pak+Khlong+Talat", img: "https://i.imgur.com/g8u4ZLy.jpg"
+            },
+            {
+                id: "mk15", subcat: "Night Markets", name: "Asiatique The Riverfront", desc: "Riverside Ferris wheel & dining.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Seafood platters, Pad Thai",
+                hours: "16:00 - 24:00", transport: "Free shuttle boat from BTS Saphan Taksin",
+                address: "2194 Charoen Krung Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Asiatique", img: "https://i.imgur.com/cjdbKhS.jpg"
+            },
+            {
+                id: "mk16", subcat: "Night Markets", name: "Srinagarindra Train Market", desc: "Massive retro vintage market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Giant noodle bowls, Bag Thai tea",
+                hours: "Thu-Sun 17:00 - 01:00", transport: "MRT Yellow Line Suan Luang Rama IX",
+                address: "1 4 Srinagarindra Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Srinagarindra+Train+Night+Market", img: "https://i.imgur.com/cjdbKhS.jpg"
+            },
+            {
+                id: "mk17", subcat: "Night Markets", name: "Save One Go", desc: "Local budget night market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Grilled river prawns, 10 THB skewers",
+                hours: "16:00 - 24:00", transport: "BTS Yaek Kor Por Aor (3 min walk)",
+                address: "Phahonyothin Rd, Don Mueang", mapUrl: "https://www.google.com/maps/search/?api=1&query=Save+One+Go+Market", img: "https://i.imgur.com/cjdbKhS.jpg"
+            },
+            {
+                id: "mk18", subcat: "Night Markets", name: "Jodd Fairs (Rama 9)", desc: "Trendy tourist market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Volcano ribs, Fresh fruit smoothies",
+                hours: "16:00 - 24:00", transport: "MRT Phra Ram 9 (5 min walk)",
+                address: "Rama IX Rd, Huai Khwang", mapUrl: "https://www.google.com/maps/search/?api=1&query=Jodd+Fairs", img: "https://i.imgur.com/cjdbKhS.jpg"
+            },
+            {
+                id: "mk19", subcat: "Night Markets", name: "Thonburi Market Place", desc: "Huge & clean seafood market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Live grilled crab, Fresh Durian",
+                hours: "07:00 - 20:00", transport: "Grab/Bolt recommended",
+                address: "58 Borommaratchachonnani Rd", mapUrl: "https://www.google.com/maps/search/?api=1&query=Thonburi+Market", img: "https://i.imgur.com/cjdbKhS.jpg"
+            },
+            {
+                id: "mk20", subcat: "Night Markets", name: "Ramkhamhaeng Night Market", desc: "Student-favorite local market.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Fried chicken, Spicy minced pork",
+                hours: "16:00 - 23:00", transport: "Taxi from ARL Ramkhamhaeng",
+                address: "Ramkhamhaeng Rd, Hua Mak", mapUrl: "https://www.google.com/maps/search/?api=1&query=Ramkhamhaeng+Night+Market", img: "https://i.imgur.com/cjdbKhS.jpg"
+            },
+            {
+                id: "mk21", subcat: "Night Markets", name: "The One Ratchada", desc: "Former Train Night Market site.<br><br><span class='text-fuchsia-300 font-bold'>🔥 Must try:</span> Spicy rib soup, Raw marinated salmon",
+                hours: "17:00 - 24:00", transport: "MRT Thailand Cultural Centre",
+                address: "Ratchadaphisek Rd, Din Daeng", mapUrl: "https://www.google.com/maps/search/?api=1&query=The+One+Ratchada", img: "https://i.imgur.com/cjdbKhS.jpg"
+            }
+        ]
+    },
+    {
+        category: "💆‍♀️ Thai_Massage",
+        items: [
+            {
+                id: "ma1", name: "Let's Relax Spa", desc: "Mid-range favorite, includes amazing mango sticky rice.",
+                hours: "10:00 - 22:00", transport: "Inside Terminal 21 (BTS Asok)",
+                address: "Terminal 21 6th Floor", mapUrl: "https://www.google.com/maps/search/?api=1&query=Lets+Relax+Terminal+21", img: "https://i.imgur.com/N1dmeRo.jpg"
+            },
+            {
+                id: "ma2", name: "Health Land (Asok)", desc: "Mansion exterior, budget prices. High CP value. Booking required.",
+                hours: "09:00 - 24:00", transport: "BTS Asok (10 min walk)",
+                address: "55/5 Sukhumvit 21, Bangkok", mapUrl: "https://www.google.com/maps/search/?api=1&query=Health+Land+Asok", img: "https://i.imgur.com/N1dmeRo.jpg"
+            },
+            {
+                id: "ma3", name: "On Nut Massage Street", desc: "Entire street of affordable massage shops. Backpacker favorite.",
+                hours: "10:00 - 23:00", transport: "BTS On Nut (3 min walk)",
+                address: "Sukhumvit 77/1 Alley", mapUrl: "https://www.google.com/maps/search/?api=1&query=Sukhumvit+77/1", img: "https://i.imgur.com/N1dmeRo.jpg"
+            },
+            {
+                id: "ma4", name: "Asia Herb Association", desc: "Exclusive herbal ball compresses in a private setting.",
+                hours: "09:00 - 24:00", transport: "BTS Phrom Phong (5 min walk)",
+                address: "50/6 Sukhumvit Soi 24", mapUrl: "https://www.google.com/maps/search/?api=1&query=Asia+Herb+Association", img: "https://i.imgur.com/N1dmeRo.jpg"
+            },
+            {
+                id: "ma5", name: "Divana Massage & Spa", desc: "Luxury oil massages blending Japanese service and Thai techniques.",
+                hours: "10:00 - 23:00", transport: "BTS Asok (7 min walk)",
+                address: "7 Sukhumvit Soi 25", mapUrl: "https://www.google.com/maps/search/?api=1&query=Divana+Massage", img: "https://i.imgur.com/N1dmeRo.jpg"
+            },
+            {
+                id: "ma6", name: "Panpuri Wellness", desc: "Ultra-luxury Onsen & Spa overlooking the city skyline.",
+                hours: "10:00 - 22:00", transport: "BTS Chit Lom (3 min walk)",
+                address: "Gaysorn Village 12th Floor", mapUrl: "https://www.google.com/maps/search/?api=1&query=Panpuri+Wellness", img: "https://i.imgur.com/N1dmeRo.jpg"
+            },
+            {
+                id: "ma7", name: "Oasis Spa (Sukhumvit 31)", desc: "Secret garden in the city offering ultimate four-hand massages.",
+                hours: "10:00 - 22:00", transport: "Free shuttle from BTS Phrom Phong",
+                address: "64 Sukhumvit Soi 31", mapUrl: "https://www.google.com/maps/search/?api=1&query=Oasis+Spa+Sukhumvit", img: "https://i.imgur.com/N1dmeRo.jpg"
+            }
+        ]
+    },
+    {
+        category: "🏞️ Suburbs_&_Nature",
+        items: [
+            {
+                id: "near1", name: "Ayutthaya", desc: "UNESCO World Heritage site, the ancient capital of Siam.", hours: "All Day", transport: "Train from Krung Thep Aphiwat Terminal",
+                address: "Phra Nakhon Si Ayutthaya", mapUrl: "https://www.google.com/maps/search/?api=1&query=Ayutthaya", img: "https://i.imgur.com/WQi92iF.jpg",
+                tabs: [
+                    { id: "n1_s", name: "Sights", items: [{ name: "Wat Mahathat", desc: "Buddha head in roots" }, { name: "Wat Chaiwatthanaram", desc: "Beautiful sunset temple" }] },
+                    { id: "n1_f", name: "Food", items: [{ name: "Boat Noodles", desc: "Original dark soup" }, { name: "River Prawns", desc: "Giant grilled prawns" }] }
+                ]
+            },
+            {
+                id: "near2", name: "Ancient City", desc: "World's largest outdoor museum. Travel all of Thailand in one day.", hours: "09:00 - 18:00", transport: "BTS Kheha then 10 min Songthaew",
+                address: "296/1 Sukhumvit Rd, Samut Prakan", mapUrl: "https://www.google.com/maps/search/?api=1&query=Ancient+City+Samut+Prakan", img: "https://i.imgur.com/ONOEoKa.jpg",
+                tabs: [
+                    { id: "n2_s", name: "Sights", items: [{ name: "Pavilion of the Enlightened", desc: "Golden water temple" }, { name: "Sanphet Prasat", desc: "Reconstructed palace" }] },
+                    { id: "n2_f", name: "Food", items: [{ name: "Buffet", desc: "All-you-can-eat Thai" }, { name: "Water Market Snacks", desc: "Boat noodles & BBQ" }] }
+                ]
+            },
+            {
+                id: "near3", name: "Amphawa Floating Market", desc: "Weekend evening market. Take a boat to see fireflies at night.", hours: "Fri-Sun 14:00 - 20:00", transport: "Minivan from Southern Bus Terminal",
+                address: "Amphawa, Samut Songkhram", mapUrl: "https://www.google.com/maps/search/?api=1&query=Amphawa", img: "https://i.imgur.com/ONOEoKa.jpg",
+                tabs: [
+                    { id: "n3_s", name: "Sights", items: [{ name: "Firefly Cruise", desc: "Mangrove secrets" }, { name: "Wat Bang Kung", desc: "Temple in a tree" }] },
+                    { id: "n3_f", name: "Food", items: [{ name: "River BBQ", desc: "Fresh prawns" }, { name: "Noodle Soup", desc: "Sweet clear broth" }] }
+                ]
+            },
+            {
+                id: "near4", name: "Damnoen Saduak", desc: "The most classic and bustling morning floating market.", hours: "07:00 - 13:00", transport: "Bus from Southern Bus Terminal",
+                address: "Damnoen Saduak, Ratchaburi", mapUrl: "https://www.google.com/maps/search/?api=1&query=Damnoen+Saduak+Floating+Market", img: "https://i.imgur.com/ONOEoKa.jpg",
+                tabs: [
+                    { id: "n4_s", name: "Sights", items: [{ name: "Rowboat Ride", desc: "Traditional trade" }, { name: "Canal Photos", desc: "Colorful boats" }] },
+                    { id: "n4_f", name: "Food", items: [{ name: "Boat Noodles", desc: "Must try" }, { name: "Coconut Ice Cream", desc: "Served in shell" }] }
+                ]
+            },
+            {
+                id: "near5", name: "Maeklong Railway Market", desc: "Breathtaking scene of a train passing right through the stalls.", hours: "08:00 - 19:00", transport: "Minivan from Southern or Eastern Terminal",
+                address: "Mae Klong, Samut Songkhram", mapUrl: "https://www.google.com/maps/search/?api=1&query=Maeklong+Railway+Market", img: "https://i.imgur.com/ONOEoKa.jpg",
+                tabs: [
+                    { id: "n5_s", name: "Sights", items: [{ name: "Train Arrival", desc: "Folding umbrellas" }, { name: "Track Walk", desc: "Market on rails" }] },
+                    { id: "n5_f", name: "Food", items: [{ name: "Roast Pork Noodles", desc: "Old shop" }, { name: "Papaya Salad", desc: "Spicy & sour" }] }
+                ]
+            },
+            {
+                id: "near6", name: "Koh Kret", desc: "Car-free island on the Chao Phraya River. Pottery and slow living.", hours: "Weekends 09:00 - 17:00", transport: "Orange Flag to Nonthaburi then ferry",
+                address: "Koh Kret, Nonthaburi", mapUrl: "https://www.google.com/maps/search/?api=1&query=Koh+Kret", img: "https://i.imgur.com/ONOEoKa.jpg",
+                tabs: [
+                    { id: "n6_s", name: "Sights", items: [{ name: "Leaning Pagoda", desc: "Iconic landmark" }, { name: "Pottery Village", desc: "Mon culture" }] },
+                    { id: "n6_f", name: "Food", items: [{ name: "Fried Flowers", desc: "Island exclusive" }, { name: "Clay Pot Coffee", desc: "Served in clay" }] }
+                ]
+            }
+        ]
+    },
+    {
+        category: "🏖️ Beach_Resorts",
+        items: [
+            {
+                id: "bch1", name: "Hua Hin", desc: "Traditional royal summer retreat. Great beaches and night markets.", hours: "All Day", transport: "Bus from Southern/Eastern Terminal (3-4 hrs)",
+                address: "Hua Hin, Prachuap Khiri Khan", mapUrl: "https://www.google.com/maps/search/?api=1&query=Hua+Hin", img: "https://i.imgur.com/M3DYX7R.jpg",
+                tabs: [
+                    { id: "b1_s", name: "Sights", items: [{ name: "Railway Station", desc: "Most beautiful station" }, { name: "Hua Hin Beach", desc: "Horse riding" }] },
+                    { id: "b1_f", name: "Food", items: [{ name: "Jek Piek", desc: "Claypot seafood" }, { name: "Pa Jua", desc: "Mango sticky rice" }] }
+                ]
+            },
+            {
+                id: "bch2", name: "Pattaya", desc: "Vibrant sleepless city. Water sports paradise.", hours: "All Day", transport: "Bus from Eastern Terminal (2 hrs)",
+                address: "Pattaya City, Chon Buri", mapUrl: "https://www.google.com/maps/search/?api=1&query=Pattaya", img: "https://i.imgur.com/YsgpUZh.jpg",
+                tabs: [
+                    { id: "b2_s", name: "Sights", items: [{ name: "Sanctuary of Truth", desc: "Wooden marvel" }, { name: "Koh Larn", desc: "Island hopping" }] },
+                    { id: "b2_f", name: "Food", items: [{ name: "Pupen", desc: "Giant crab" }, { name: "Cave Beach", desc: "Beach club" }] }
+                ]
+            },
+            {
+                id: "bch3", name: "Koh Samet", desc: "Locals' favorite weekend island. Famous fire shows.", hours: "All Day", transport: "Bus from Eastern Terminal to pier + ferry",
+                address: "Koh Samet, Rayong", mapUrl: "https://www.google.com/maps/search/?api=1&query=Koh+Samet", img: "https://i.imgur.com/YsgpUZh.jpg",
+                tabs: [
+                    { id: "b3_s", name: "Sights", items: [{ name: "Diamond Beach", desc: "Fire shows" }, { name: "Ao Phrao", desc: "Stunning sunsets" }] },
+                    { id: "b3_f", name: "Food", items: [{ name: "Beach BBQ", desc: "Grilled prawns" }, { name: "Ploy Talay", desc: "Fire show dining" }] }
+                ]
+            },
+            {
+                id: "bch4", name: "Koh Chang", desc: "Thailand's 2nd largest island. Pristine jungles and beaches.", hours: "All Day", transport: "Bus from Eastern Terminal to pier + ferry (6 hrs)",
+                address: "Koh Chang, Trat", mapUrl: "https://www.google.com/maps/search/?api=1&query=Koh+Chang", img: "https://i.imgur.com/YsgpUZh.jpg",
+                tabs: [
+                    { id: "b4_s", name: "Sights", items: [{ name: "White Sand Beach", desc: "Lively hub" }, { name: "Lonely Beach", desc: "Backpackers" }] },
+                    { id: "b4_f", name: "Food", items: [{ name: "Fire Show BBQ", desc: "Great vibe" }, { name: "Curry Crab", desc: "Rich seafood" }] }
+                ]
+            }
+        ]
+    }
+];
+
+const essData = {
+    check: [
+        { n: "Passport & Visas", d: "Ensure 6+ months validity." },
+        { n: "Travel SIM / eSIM", d: "Essential for navigation." },
+        { n: "Thai Baht (Cash)", d: "Needed for markets and Tuk-Tuks." },
+        { n: "Light Long Sleeves", d: "Required for temple visits." },
+        { n: "Lightweight Umbrella", d: "For afternoon showers." }
+    ],
+    good: [
+        { n: "Vacuum Storage Bags", d: "Saves luggage space." },
+        { n: "Hanging Toiletry Bag", d: "Saves bathroom counter space." },
+        { n: "Portable Fan", d: "A lifesaver in Bangkok heat." },
+        { n: "Universal Adapter", d: "For multiple devices." },
+        { n: "Basic Meds", d: "For stomach upsets." }
+    ]
+};
+
+// --- Itinerary Data ---
+const itineraryData = {
+    day1: [
+        { time: "Morning", act: "<span class='font-bold text-teal-300'>Grand Palace & Wat Phra Kaew</span><br>Thailand's most sacred and magnificent architectural complex." },
+        { time: "Afternoon", act: "<span class='font-bold text-teal-300'>Wat Pho & Wat Arun</span><br>See the giant Reclining Buddha, then take a boat across the river to Wat Arun. Perfect for renting traditional Thai costumes for photos." },
+        { time: "Evening", act: "<span class='font-bold text-teal-300'>Khao San Road</span><br>The backpacker haven. Grab a drink, enjoy live Thai pop music, and soak in the vibrant street vibe." }
+    ],
+    day2: [
+        { time: "Morning to Afternoon", act: "<span class='font-bold text-teal-300'>Siam Area (Siam Square, Center, Paragon)</span><br>The heart of Bangkok's fashion. Check out international luxury brands and Thai designer boutiques." },
+        { time: "Evening", act: "<span class='font-bold text-teal-300'>Erawan Shrine & CentralWorld</span><br>Visit the famous Erawan Shrine, then stroll through the massive CentralWorld mall." },
+        { time: "Night", act: "<span class='font-bold text-teal-300'>Jodd Fairs</span><br>Bangkok's trendiest night market. Must-try: Volcano Ribs and fruit smoothies." }
+    ],
+    day3: [
+        { time: "Morning", act: "<span class='font-bold text-teal-300'>Damnoen Saduak Floating Market</span><br>Take a rowboat through the canals and experience traditional water trading." },
+        { time: "Noon", act: "<span class='font-bold text-teal-300'>Maeklong Railway Market</span><br>A world wonder! Watch vendors quickly retract their awnings as the train passes inches away." },
+        { time: "Evening", act: "<span class='font-bold text-teal-300'>Amphawa Floating Market</span><br>Take an evening boat ride to see the fireflies along the quiet riverbanks." }
+    ],
+    day4: [
+        { time: "Daytime", act: "<span class='font-bold text-teal-300'>Chatuchak Market / Ari District</span><br><b>(Weekends) Chatuchak:</b> The world's largest weekend market. Perfect for souvenirs and fashion.<br><br><b>(Weekdays) Ari:</b> A hipster cafe hub with minimalist designs and curated shops." },
+        { time: "Night", act: "<span class='font-bold text-teal-300'>The Commons Thonglor</span><br>A semi-outdoor vertical village featuring premium coffee, craft beer, and great food." }
+    ],
+    day5: [
+        { time: "Morning", act: "<span class='font-bold text-teal-300'>River City Bangkok</span><br>Bangkok's premier arts and antiques center with frequent free exhibitions." },
+        { time: "Afternoon", act: "<span class='font-bold text-teal-300'>Charoen Krung & Warehouse 30</span><br>Explore street art and renovated warehouse spaces filled with indie bookstores and cafes." },
+        { time: "Night", act: "<span class='font-bold text-teal-300'>ICONSIAM & Asiatique</span><br>Experience the stunning indoor floating market at ICONSIAM, then head to Asiatique for dinner and the Ferris wheel." }
+    ],
+    ayutthaya: [
+        { time: "Morning", act: "<span class='font-bold text-teal-300'>Bang Pa-In Palace & Wat Mahathat</span><br>Visit the beautiful summer palace, then see the famous Buddha head entwined in tree roots." },
+        { time: "Afternoon", act: "<span class='font-bold text-teal-300'>Wat Chaiwatthanaram</span><br>Rent a traditional Thai costume and take photos at this stunning ancient temple." },
+        { time: "Night", act: "<span class='font-bold text-teal-300'>Ayutthaya Night Market</span><br>Taste authentic local snacks like boat noodles and Thai crispy pancakes." }
+    ],
+    kanchanaburi: [
+        { time: "Morning", act: "<span class='font-bold text-teal-300'>River Kwai Bridge & Death Railway / Safari Park</span><br>Ride the historic vintage train or visit the Safari Park to feed giraffes directly from your vehicle." },
+        { time: "Afternoon", act: "<span class='font-bold text-teal-300'>Mallika City / Erawan Waterfall</span><br>Explore a retro Thai village or swim in the emerald green tiered waterfalls." },
+        { time: "Evening", act: "<span class='font-bold text-teal-300'>Meena Cafe</span><br>Enjoy Thai tea with a view of rice paddies and distant temples." },
+        { time: "Night", act: "<span class='font-bold text-teal-300'>Floating Hotel Stay</span><br>Stay in a floating raft house on the river for ultimate tranquility." }
+    ],
+    huahin: [
+        { time: "Day 1 Morning", act: "<span class='font-bold text-teal-300'>Hua Hin Station & Khao Wang</span><br>Visit the iconic red-and-white wooden train station, then take a cable car up to the hilltop palace." },
+        { time: "Day 1 Evening", act: "<span class='font-bold text-teal-300'>Beach Riding & Cicada Market</span><br>Ride a horse along the beach, then visit the Cicada Market for art, crafts, and food." },
+        { time: "Day 2", act: "<span class='font-bold text-teal-300'>Khao Sam Roi Yot (Phraya Nakhon Cave)</span><br>Hike into the massive cave to see sunlight perfectly illuminating the golden royal pavilion inside." }
+    ],
+    pattaya: [
+        { time: "Morning", act: "<span class='font-bold text-teal-300'>Sanctuary of Truth / Koh Larn Island</span><br>Marvel at the massive all-wood temple or take a speedboat to Koh Larn for water sports and pristine beaches." },
+        { time: "Afternoon", act: "<span class='font-bold text-teal-300'>Seaview Cafe / Terminal 21</span><br>Relax at a beautiful beach club (like Cave Beach Club) or shop at the airplane-themed Terminal 21 mall." },
+        { time: "Night", act: "<span class='font-bold text-teal-300'>Walking Street / Tiffany's Show</span><br>Experience Pattaya's famous nightlife or enjoy the spectacular transgender cabaret show." }
+    ]
+};
+
+// --- View Rendering Logic ---
+window.switchEssTab = t => {
+    let isC = (t === 'checklist');
+    document.getElementById('ess-checklist').classList.toggle('hidden', !isC);
+    document.getElementById('ess-goodies').classList.toggle('hidden', isC);
+    document.getElementById('btn-ess-checklist').className = isC ? "flex-1 bg-violet-600 text-white py-2 rounded-lg text-sm font-bold" : "flex-1 bg-slate-800 text-slate-300 border border-slate-700 py-2 rounded-lg text-sm font-bold";
+    document.getElementById('btn-ess-goodies').className = !isC ? "flex-1 bg-violet-600 text-white py-2 rounded-lg text-sm font-bold" : "flex-1 bg-slate-800 text-slate-300 border border-slate-700 py-2 rounded-lg text-sm font-bold";
+};
+
+window.renderItin = d => {
+    document.querySelectorAll('.itin-btn').forEach(t => t.className = "itin-btn bg-teal-900 border border-teal-700 px-4 py-2 rounded-lg text-xs text-teal-200 shrink-0");
+    document.getElementById('btn-itin-' + d).className = "itin-btn bg-teal-600 text-white font-bold px-4 py-2 rounded-lg text-xs shadow-md shrink-0";
+    document.getElementById('itin-list').innerHTML = '<div class="absolute left-[11px] top-2 bottom-2 w-0.5 bg-teal-800 border-l-2 border-dotted"></div>' + itineraryData[d].map((i, idx) => `<div class="relative pl-8 animate-[fadeIn_0.3s_ease-out]" style="animation-delay: ${idx * 0.05}s"><div class="absolute left-[7px] top-1 w-2.5 h-2.5 bg-teal-400 rounded-full shadow-[0_0_8px_rgba(45,212,191,0.8)]"></div><span class="text-[10px] text-teal-300 font-mono font-bold block mb-0.5">${i.time}</span><div class="bg-teal-900/40 p-3 rounded-xl border border-teal-800/50 text-sm text-white leading-relaxed">${i.act}</div></div>`).join('');
+};
+
+window.resetAttrView = () => { document.getElementById('attr-cat-grid').classList.remove('hidden'); document.getElementById('attr-detail-view').classList.add('hidden'); document.getElementById('attr-result').classList.add('hidden'); };
+
+const bfsEdgeTrack = (g, s, e) => {
+    if (s === e) return { path: [s], edges: [] };
+    let q = [{ node: s, path: [s], edges: [] }];
+    let v = new Set([s]);
+    while (q.length > 0) {
+        let curr = q.shift();
+        if (curr.node === e) return curr;
+        if (g[curr.node]) {
+            for (let edge of g[curr.node]) {
+                if (!v.has(edge.node)) {
+                    v.add(edge.node);
+                    q.push({
+                        node: edge.node,
+                        path: [...curr.path, edge.node],
+                        edges: [...curr.edges, edge]
+                    });
+                }
+            }
+        }
+    }
+    return null;
+};
+
+window.calcMrt = () => {
+    const o = document.getElementById('mrt-origin').value;
+    const d = document.getElementById('mrt-dest').value;
+    if (!o || !d) return alert('Please select origin and destination');
+    
+    const res = document.getElementById('mrt-result');
+    res.classList.remove('hidden');
+    
+    if (o === d) {
+        document.getElementById('mrt-stops-count').innerHTML = `<span class="text-2xl">0</span><span class="text-sm ml-1 text-gray-400">stops</span>`;
+        document.getElementById('mrt-time').textContent = `~ 0 mins`;
+        document.getElementById('mrt-path-detail').innerHTML = `<div class="text-center text-gray-400 py-4 text-xs bg-gray-800/50 rounded-xl">Origin and destination are the same.</div>`;
+        return;
+    }
+
+    const result = bfsEdgeTrack(mrtGraphLocal, o, d);
+    if (!result) { 
+        document.getElementById('mrt-stops-count').textContent = 'None'; 
+        document.getElementById('mrt-path-detail').innerHTML = 'Cannot calculate route'; 
+        return; 
+    }
+
+    let segments = [];
+    let currentSegment = null;
+
+    for (let i = 0; i < result.edges.length; i++) {
+        let edge = result.edges[i];
+        
+        if (edge.type === 'transfer') {
+            if (currentSegment) {
+                segments.push(currentSegment);
+                currentSegment = null;
+            }
+            segments.push({
+                line: 'Walking Transfer',
+                startNode: result.path[i],
+                endNode: edge.node,
+                stops: 0,
+                isTransfer: true
+            });
+        } else {
+            if (!currentSegment || currentSegment.line !== edge.line) {
+                if (currentSegment) segments.push(currentSegment);
+                currentSegment = {
+                    line: edge.line,
+                    startNode: result.path[i],
+                    endNode: edge.node,
+                    stops: 1,
+                    isTransfer: false
+                };
+            } else {
+                currentSegment.endNode = edge.node;
+                currentSegment.stops++;
+            }
+        }
+    }
+    if (currentSegment) segments.push(currentSegment);
+
+    let totalStops = segments.reduce((sum, seg) => sum + seg.stops, 0);
+    let totalTransfers = segments.filter(s => s.isTransfer).length + segments.filter((s, idx) => idx > 0 && !s.isTransfer && !segments[idx-1].isTransfer).length;
+    let estimatedTime = totalStops * 3 + totalTransfers * 5 + 5;
+
+    document.getElementById('mrt-stops-count').innerHTML = `<span class="text-2xl">${totalStops}</span><span class="text-sm ml-1 text-gray-400">stops</span>`;
+    document.getElementById('mrt-time').textContent = `~ ${estimatedTime} mins`;
+
+    let originName = codeToNameLocal[o] || o;
+    let destName = codeToNameLocal[d] || d;
+
+    let detailHtml = `
+        <div class="bg-teal-900/30 p-3.5 rounded-xl border border-teal-800 mb-6 shadow-sm">
+            <div class="flex items-center gap-2.5 mb-2">
+                <span class="text-[10px] text-teal-400 font-bold bg-teal-950 px-1.5 py-0.5 rounded shadow-sm">From</span> 
+                <span class="text-xs font-bold text-white">${originName}</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <span class="text-[10px] text-rose-400 font-bold bg-rose-950 px-1.5 py-0.5 rounded shadow-sm">To</span> 
+                <span class="text-xs font-bold text-white">${destName}</span>
+            </div>
+        </div>
+        <div class="relative ml-2">
+            <div class="absolute left-[13px] top-2 bottom-2 w-0.5 bg-gray-600 border-l-2 border-dotted"></div>
+    `;
+
+    segments.forEach((seg, idx) => {
+        let startName = codeToNameLocal[seg.startNode] || seg.startNode;
+        let endName = codeToNameLocal[seg.endNode] || seg.endNode;
+
+        if (seg.isTransfer) {
+            let nextLine = segments[idx + 1] ? segments[idx + 1].line : '';
+            detailHtml += `
+                <div class="relative flex items-center gap-3 my-5">
+                    <div class="w-7 h-7 rounded-full bg-rose-500 z-10 shadow-[0_0_8px_rgba(244,63,94,0.8)] flex items-center justify-center">
+                        <i class="ph-fill ph-person-simple-walk text-white text-sm"></i>
+                    </div>
+                    <div class="bg-rose-950/70 px-3 py-1.5 rounded-lg border border-rose-800/50">
+                        <span class="text-[11px] font-bold text-rose-300">Walk to ${nextLine} <br>(at ${endName.split(' ')[0]})</span>
+                    </div>
+                </div>
+            `;
+        } else {
+            if (idx > 0 && !segments[idx - 1].isTransfer) {
+                detailHtml += `
+                    <div class="relative flex items-center gap-3 my-5">
+                        <div class="w-7 h-7 rounded-full bg-amber-500 z-10 shadow-[0_0_8px_rgba(245,158,11,0.8)] flex items-center justify-center">
+                            <i class="ph-fill ph-arrows-left-right text-white text-sm"></i>
+                        </div>
+                        <div class="bg-amber-950/70 px-3 py-1.5 rounded-lg border border-amber-800/50">
+                            <span class="text-[11px] font-bold text-amber-400">Transfer to ${seg.line} at ${startName.split(' ')[0]}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let dotColor = "bg-teal-400";
+            if (seg.line.includes('Blue')) dotColor = "bg-blue-500";
+            if (seg.line.includes('Yellow')) dotColor = "bg-yellow-400";
+            if (seg.line.includes('Silom')) dotColor = "bg-teal-500";
+            if (seg.line.includes('Sukhumvit')) dotColor = "bg-green-400";
+            if (seg.line.includes('Gold')) dotColor = "bg-yellow-600";
+            if (seg.line.includes('ARL')) dotColor = "bg-red-500";
+
+            detailHtml += `
+                <div class="relative my-4 ml-8 bg-gray-800/80 p-3.5 rounded-xl border border-gray-700 shadow-md">
+                    <div class="absolute -left-[26px] top-4 w-3.5 h-3.5 rounded-full ${dotColor} z-10 shadow-[0_0_8px_rgba(45,212,191,0.5)] border-2 border-gray-900"></div>
+                    <div class="flex justify-between items-center mb-2.5 pb-2 border-b border-gray-700/50">
+                        <span class="text-xs font-bold text-white">${seg.line}</span>
+                        <span class="text-[10px] text-gray-400 bg-gray-900 px-2 py-0.5 rounded-md font-mono">${seg.stops} Stops</span>
+                    </div>
+                    <div class="space-y-2 pt-0.5">
+                        <div class="flex items-start gap-2">
+                            <span class="text-[10px] text-gray-500 w-8 mt-0.5 shrink-0">Start</span>
+                            <span class="text-xs text-gray-200 leading-tight">${startName}</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <span class="text-[10px] text-gray-500 w-8 mt-0.5 shrink-0">End</span>
+                            <span class="text-xs text-gray-200 leading-tight">${endName}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    detailHtml += `</div>`;
+    document.getElementById('mrt-path-detail').innerHTML = detailHtml;
+};
+
+window.calcBoat = () => {
+    const bfsSimple = (g, s, e) => {
+        if (s === e) return [s];
+        let q = [[s]], v = new Set([s]);
+        while (q.length > 0) {
+            let p = q.shift(), n = p[p.length - 1];
+            if (n === e) return p;
+            if (g[n]) {
+                for (let nb of g[n]) {
+                    if (!v.has(nb)) { v.add(nb); q.push([...p, nb]); }
+                }
+            }
+        }
+        return null;
+    };
+    
+    const o = document.getElementById('boat-origin').value;
+    const d = document.getElementById('boat-dest').value;
+    if (!o || !d) return alert('Please select origin and destination');
+    const p = bfsSimple(boatGraphLocal, o, d);
+    const r = document.getElementById('boat-result');
+    r.classList.remove('hidden');
+    if (!p) { document.getElementById('boat-stops-count').textContent = 'Transfer Needed'; document.getElementById('boat-path-detail').innerHTML = 'No direct route available'; return; }
+    document.getElementById('boat-stops-count').textContent = `${p.length - 1} stops`;
+    document.getElementById('boat-time').textContent = `~ ${(p.length - 1) * 5 + 5} mins`;
+    document.getElementById('boat-path-detail').innerHTML = `<div class="absolute left-[5px] top-2 bottom-2 w-0.5 bg-slate-600 border-l-2 border-dotted"></div>` + p.map((n, i) => `<div class="relative flex items-center gap-3"><div class="absolute -left-[14px] w-2 h-2 rounded-full ${i === 0 ? 'bg-blue-400' : (i === p.length - 1 ? 'bg-orange-500' : 'bg-slate-500')}"></div><span class="${(i === 0 || i === p.length - 1) ? 'text-white font-bold' : 'text-slate-400 text-xs'}">${n}</span></div>`).join('');
+};
+
+window.selectAttrTab = (id, el) => {
+    document.querySelectorAll('.attr-tbtn').forEach(b => { b.classList.remove('bg-fuchsia-600', 'text-white', 'font-bold'); b.classList.add('bg-purple-900', 'text-purple-200', 'border-purple-700'); });
+    el.classList.add('bg-fuchsia-600', 'text-white', 'font-bold'); el.classList.remove('bg-purple-900', 'text-purple-200', 'border-purple-700');
+    document.querySelectorAll('.attr-tcont').forEach(c => c.classList.add('hidden')); document.getElementById(id).classList.remove('hidden');
+};
+
+// --- Initialization ---
+document.addEventListener('DOMContentLoaded', () => {
+    const updateTime = () => {
+        const now = new Date();
+        const dStr = now.toLocaleDateString('en-US', { timeZone: 'Asia/Bangkok', month: 'short', day: '2-digit', weekday: 'short' });
+        const tStr = now.toLocaleTimeString('en-US', { timeZone: 'Asia/Bangkok', hour: '2-digit', minute: '2-digit', hour12: true });
+        const el = document.getElementById('datetime-display'); if (el) el.textContent = `${dStr} ${tStr} (Bangkok Time)`;
+    };
+    updateTime(); setInterval(updateTime, 1000);
+
+    const fetchWeather = async () => {
+        try { const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=13.75&longitude=100.51&current=temperature_2m&timezone=Asia%2FBangkok'); const data = await res.json(); const el = document.getElementById('weather-display'); if (el) el.innerHTML = `<i class="ph-fill ph-sun text-yellow-400 text-lg"></i> Bangkok Clear, ${data.current.temperature_2m}°C`; }
+        catch (e) { const el = document.getElementById('weather-display'); if (el) el.innerHTML = `<i class="ph-fill ph-sun text-yellow-400 text-lg"></i> Bangkok Clear, 32°C`; }
+    };
+    fetchWeather();
+
+    const track = document.getElementById('carousel-track'); let slide = 0;
+    if (track) setInterval(() => { slide = (slide + 1) % 3; track.style.transform = `translateX(-${slide * 93}%)`; }, 3000);
+
+    const mo = document.getElementById('mrt-origin'), md = document.getElementById('mrt-dest');
+    mrtLinesDataLocal.forEach(g => { let opt = `<optgroup label="${g.line}">${g.items.map(i=>`<option value="${i.split(' ')[0]}">${i}</option>`).join('')}</optgroup>`; if(mo) mo.innerHTML += opt; if(md) md.innerHTML += opt; });
+    
+    const bo = document.getElementById('boat-origin'), bd = document.getElementById('boat-dest');
+    boatLinesDataLocal.forEach(g => { let opt = `<optgroup label="${g.line}">${g.items.map(i=>`<option value="${i.split(' ')[0]}">${i}</option>`).join('')}</optgroup>`; if(bo) bo.innerHTML += opt; if(bd) bd.innerHTML += opt; });
+
+    const eC = document.getElementById('ess-checklist');
+    if(eC) eC.innerHTML = essData.check.map(i=>`<label class="flex items-start gap-3 bg-slate-800/80 p-3.5 rounded-xl border border-slate-700 active:scale-95 transition-transform"><input type="checkbox" class="w-5 h-5 rounded mt-0.5 shrink-0 bg-slate-900"><div><p class="font-bold text-sm text-white">${i.n}</p><p class="text-[11px] text-slate-400">${i.d}</p></div></label>`).join('');
+    
+    const eG = document.getElementById('ess-goodies');
+    if(eG) eG.innerHTML = essData.good.map(i=>`<div class="flex items-start gap-3 bg-slate-800/80 p-3.5 rounded-xl border border-slate-700"><div class="w-10 h-10 rounded-full bg-violet-500/20 text-violet-400 flex flex-col justify-center items-center shrink-0"><i class="ph-fill ph-star"></i></div><div><p class="font-bold text-sm text-white">${i.n}</p><p class="text-[11px] text-slate-400">${i.d}</p></div></div>`).join('');
+
+    renderItin('day1');
+
+    const aG = document.getElementById('attr-cat-grid');
+    if(aG){
+        attractionsData.forEach((c,idx)=>{
+            let b = document.createElement('button');
+            b.className = "bg-purple-900 border border-purple-800 rounded-xl p-3 flex flex-col items-center justify-center gap-2 active:scale-95 shadow-md";
+            // Use substring to allow category names with spaces
+            let icon = c.category.split(' ')[0];
+            let title = c.category.substring(c.category.indexOf(' ') + 1).replace(/_/g, ' ');
+            b.innerHTML = `<span class="text-2xl">${icon}</span><span class="text-[11px] font-bold text-purple-200 text-center leading-tight">${title}</span>`;
+            b.onclick = () => {
+                window.currentAttrCatIdx = idx;
+                document.getElementById('attr-cat-grid').classList.add('hidden');
+                document.getElementById('attr-detail-view').classList.remove('hidden');
+                const sel = document.getElementById('attraction-select');
+                sel.innerHTML = '<option value="" disabled selected>Select Attraction...</option>';
+                const subT = document.getElementById('attr-subcat-tabs');
+                subT.innerHTML = '';
+                if(c.items.length > 0 && c.items[0].subcat){
+                    const subs = [...new Set(c.items.map(i=>i.subcat))];
+                    subs.forEach((s,sidx)=>{
+                        let tb = document.createElement('button');
+                        tb.className = sidx === 0 ? "bg-fuchsia-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold" : "bg-purple-900 text-purple-200 px-3 py-1.5 rounded-lg text-xs border border-purple-700";
+                        tb.textContent = s;
+                        tb.onclick = () => {
+                            Array.from(subT.children).forEach(x=>x.className="bg-purple-900 text-purple-200 px-3 py-1.5 rounded-lg text-xs border border-purple-700");
+                            tb.className="bg-fuchsia-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold";
+                            sel.innerHTML='<option value="" disabled selected>Select Attraction...</option>' + c.items.filter(i=>i.subcat===s).map(item=>`<option value="${item.id}">${item.name}</option>`).join('');
+                            document.getElementById('attr-result').classList.add('hidden');
+                        };
+                        subT.appendChild(tb);
+                    });
+                    sel.innerHTML += c.items.filter(i=>i.subcat===subs[0]).map(item=>`<option value="${item.id}">${item.name}</option>`).join('');
+                } else {
+                    sel.innerHTML += c.items.map(item=>`<option value="${item.id}">${item.name}</option>`).join('');
+                }
+            };
+            aG.appendChild(b);
+        });
+    }
+
+    const aS = document.getElementById('attraction-select');
+    if(aS){
+        aS.addEventListener('change', e => {
+            let item = attractionsData[window.currentAttrCatIdx].items.find(i=>i.id===e.target.value);
+            if(item){
+                document.getElementById('attr-result').classList.remove('hidden');
+                document.getElementById('attr-name').innerHTML=item.name;
+                document.getElementById('attr-desc').innerHTML=item.desc;
+                document.getElementById('attr-hours').innerHTML=item.hours;
+                document.getElementById('attr-transport').innerHTML=item.transport;
+                document.getElementById('attr-address').innerHTML=item.address;
+                document.getElementById('attr-img').src=item.img;
+                document.getElementById('attr-map-link').href=item.mapUrl;
+                const th = document.getElementById('attr-tabs-header'), tc = document.getElementById('attr-tabs-container');
+                if(item.tabs){
+                    th.style.display='flex'; tc.style.display='block';
+                    th.innerHTML = item.tabs.map((t,i)=>`<button onclick="window.selectAttrTab('${t.id}',this)" class="attr-tbtn px-3 py-1.5 rounded-lg text-xs whitespace-nowrap border ${i===0?'bg-fuchsia-600 text-white font-bold':'bg-purple-900 text-purple-200 border-purple-700'}">${t.name}</button>`).join('');
+                    tc.innerHTML = item.tabs.map((t,i)=>`<div id="${t.id}" class="attr-tcont space-y-2 ${i===0?'':'hidden'}">${t.items.map(x=>`<div class="bg-purple-900/40 p-3 rounded-xl border border-purple-800"><p class="font-bold text-sm text-fuchsia-300">${x.name}</p><p class="text-[11px] text-purple-200 mt-1">${x.desc}</p></div>`).join('')}</div>`).join('');
+                } else { th.style.display='none'; tc.style.display='none'; }
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>
